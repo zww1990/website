@@ -13,7 +13,6 @@ import java.util.stream.Stream;
  * 视频网站应用程序启动类
  *
  * @author 张维维
- * @since 2023-10-01 18:48:38
  */
 @SpringBootApplication
 @Slf4j
