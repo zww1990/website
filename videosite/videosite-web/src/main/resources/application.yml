@@ -1,0 +1,62 @@
+server:
+  port: 8888
+  ssl:
+    enabled: false
+  servlet:
+    jsp:
+      registered: false
+
+spring:
+  application:
+    name: videosite-app
+    admin:
+      enabled: false
+  sql:
+    init:
+      mode: never
+  jmx:
+    enabled: false
+  profiles:
+    active: dev
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.ssl.SslAutoConfiguration
+      - org.springframework.boot.autoconfigure.websocket.servlet.WebSocketServletAutoConfiguration
+      - org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration
+      - org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration
+      - org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.web.SpringDataWebAutoConfiguration
+      - org.springframework.boot.autoconfigure.info.ProjectInfoAutoConfiguration
+      - org.springframework.boot.autoconfigure.task.TaskSchedulingAutoConfiguration
+      - org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration
+      - org.springframework.boot.autoconfigure.dao.PersistenceExceptionTranslationAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.JdbcClientAutoConfiguration
+      - org.springframework.boot.autoconfigure.web.client.RestClientAutoConfiguration
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+
+videosite-app:
+  include-path-patterns:
+    - /category/**
+    - /comment/**
+    - /videohub/**
+    - /user/list
+  exclude-path-patterns:
+    - /videohub/show/**
+    - /videohub/addhits/**
+    - /videohub/search
+    - /category/list
+  admin-path-patterns:
+    - /category/**
+    - /videohub/audit/**
+    - /user/list
+  image-mime-patterns: image/*
+  video-mime-patterns: video/*
+  image-upload-folder: /upload/images
+  video-upload-folder: /upload/videos
