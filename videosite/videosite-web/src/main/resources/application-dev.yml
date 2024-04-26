@@ -1,0 +1,15 @@
+# 本地开发环境配置
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/videosite?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+  jpa:
+    show-sql: true
+
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: always
+    include-exception: true
