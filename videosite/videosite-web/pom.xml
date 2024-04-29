@@ -19,7 +19,7 @@
 		<vue.version>3.4.25</vue.version>
 		<vue-router.version>4.3.2</vue-router.version>
 		<ant-design-vue.version>4.2.1</ant-design-vue.version>
-		<dayjs.version>1.11.10</dayjs.version>
+		<dayjs.version>1.11.11</dayjs.version>
 		<font-awesome.version>4.7.0</font-awesome.version>
 	</properties>
 
