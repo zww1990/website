@@ -6,10 +6,11 @@ import io.online.videosite.domain.User;
 import io.online.videosite.properties.VideoSiteAppProperties;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.PathContainer;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.util.pattern.PathPatternParser;
@@ -22,11 +23,11 @@ import java.util.stream.Stream;
  * @author 张维维
  */
 @Slf4j
+@AllArgsConstructor
+@Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
-    @Autowired
-    private PathPatternParser pathPatternParser;
-    @Autowired
-    private VideoSiteAppProperties appProps;
+    private final PathPatternParser pathPatternParser = new PathPatternParser();
+    private final VideoSiteAppProperties appProps;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

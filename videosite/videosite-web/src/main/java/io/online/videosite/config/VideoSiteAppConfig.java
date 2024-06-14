@@ -33,11 +33,12 @@ import java.nio.file.Paths;
 @Slf4j
 public class VideoSiteAppConfig implements WebMvcConfigurer, CommandLineRunner, ErrorPageRegistrar {
     private final VideoSiteAppProperties appProps;
+    private final AuthenticationInterceptor authenticationInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         log.info("{}", this.appProps);
-        registry.addInterceptor(authenticationInterceptor())
+        registry.addInterceptor(this.authenticationInterceptor)
                 .addPathPatterns(this.appProps.getIncludePathPatterns())
                 .excludePathPatterns(this.appProps.getExcludePathPatterns());
     }
@@ -57,14 +58,6 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, CommandLineRunner, 
                 .allowedMethods(CorsConfiguration.ALL)
                 .allowedOriginPatterns(CorsConfiguration.ALL)
                 .exposedHeaders(CorsConfiguration.ALL);
-    }
-
-    /**
-     * 注册身份验证拦截器
-     */
-    @Bean
-    AuthenticationInterceptor authenticationInterceptor() {
-        return new AuthenticationInterceptor();
     }
 
     /**

@@ -12,12 +12,20 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.modulith.core.ApplicationModules;
 import org.springframework.web.client.HttpClientErrorException;
 
 @SpringBootTest
 public class VideoSiteApplicationTests {
     @Autowired
     private ApplicationContext applicationContext;
+
+    @Test
+    public void verifiesModularStructure() {
+        ApplicationModules modules = ApplicationModules.of(VideoSiteApplication.class);
+        modules.verify();
+        modules.forEach(System.out::println);
+    }
 
     @Test
     public void testContextLoads() throws Exception {
