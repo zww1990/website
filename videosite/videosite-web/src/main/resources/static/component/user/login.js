@@ -1,4 +1,4 @@
-import { loginApi } from '../utils/api.js'
+import { loginApi } from '../utils/fetchapi.js'
 import { store } from '../utils/store.js'
 
 const { ref, reactive } = Vue

@@ -1,4 +1,4 @@
-import { logoutApi, videoSearchApi } from './api.js'
+import { logoutApi, videoSearchApi } from './fetchapi.js'
 
 const { ref, reactive } = Vue
 

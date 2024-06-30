@@ -1,4 +1,4 @@
-import { registerApi } from '../utils/api.js'
+import { registerApi } from '../utils/fetchapi.js'
 
 const { ref, reactive } = Vue
 const { message } = antd

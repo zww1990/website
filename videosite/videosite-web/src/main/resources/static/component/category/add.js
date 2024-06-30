@@ -1,4 +1,4 @@
-import { categoryAddApi } from '../utils/api.js'
+import { categoryAddApi } from '../utils/fetchapi.js'
 
 const { ref, reactive } = Vue
 const { message } = antd

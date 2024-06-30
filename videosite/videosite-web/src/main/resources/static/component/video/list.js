@@ -1,4 +1,4 @@
-import { videoListApi, videoDelApi } from '../utils/api.js'
+import { videoListApi, videoDelApi } from '../utils/fetchapi.js'
 import { store } from '../utils/store.js'
 
 const { ref, reactive } = Vue

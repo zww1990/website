@@ -1,4 +1,4 @@
-import { videoAuditApi, videoHandleAuditApi } from '../utils/api.js'
+import { videoAuditApi, videoHandleAuditApi } from '../utils/fetchapi.js'
 import { store } from '../utils/store.js'
 
 const { message, notification } = antd

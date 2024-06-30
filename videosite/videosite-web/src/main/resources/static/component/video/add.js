@@ -1,4 +1,4 @@
-import { videoAddApi, categoryListApi } from '../utils/api.js'
+import { videoAddApi, categoryListApi } from '../utils/fetchapi.js'
 
 const { ref, reactive } = Vue
 const { message, Upload } = antd

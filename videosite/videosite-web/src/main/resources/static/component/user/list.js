@@ -1,4 +1,4 @@
-import { userListApi } from '../utils/api.js'
+import { userListApi } from '../utils/fetchapi.js'
 
 const { message } = antd
 
