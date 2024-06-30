@@ -12,17 +12,27 @@ const router = createRouter({
     { path: '/register', component: () => import('./user/register.js') },
     { path: '/success', component: () => import('./user/success.js') },
     { path: '/users', component: () => import('./user/list.js') },
-    { path: '/cate/add', component: () => import('./category/add.js') },
-    { path: '/cate/success', component: () => import('./category/success.js') },
-    { path: '/video/show/:id', component: () => import('./video/show.js') },
-    { path: '/video/edit/:id', component: () => import('./video/edit.js') },
-    { path: '/video/editsuc', component: () => import('./video/editsuc.js') },
-    { path: '/video/audit/:id', component: () => import('./video/audit.js') },
-    { path: '/video/auditsuc', component: () => import('./video/auditsuc.js') },
-    { path: '/video/list', component: () => import('./video/list.js') },
-    { path: '/video/search', component: () => import('./video/search.js') },
-    { path: '/video/add', component: () => import('./video/add.js') },
-    { path: '/video/addsuc', component: () => import('./video/addsuc.js') },
+    {
+      path: '/cate',
+      children: [
+        { path: 'add', component: () => import('./category/add.js') },
+        { path: 'success', component: () => import('./category/success.js') }
+      ]
+    },
+    {
+      path: '/video',
+      children: [
+        { path: 'show/:id', component: () => import('./video/show.js') },
+        { path: 'edit/:id', component: () => import('./video/edit.js') },
+        { path: 'editsuc', component: () => import('./video/editsuc.js') },
+        { path: 'audit/:id', component: () => import('./video/audit.js') },
+        { path: 'auditsuc', component: () => import('./video/auditsuc.js') },
+        { path: 'list', component: () => import('./video/list.js') },
+        { path: 'search', component: () => import('./video/search.js') },
+        { path: 'add', component: () => import('./video/add.js') },
+        { path: 'addsuc', component: () => import('./video/addsuc.js') }
+      ]
+    },
     { path: '/:pathMatch(.*)*', redirect: '/' }
   ]
 })
