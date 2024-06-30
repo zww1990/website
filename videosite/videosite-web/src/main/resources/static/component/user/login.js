@@ -7,13 +7,14 @@ const { message } = antd
 export default {
   setup() {
     const router = VueRouter.useRouter()
+    const route = VueRouter.useRoute()
     const formState = reactive({ username: '', password: '' })
     const onFinish = async values => {
       const res = await loginApi(values)
       if(res.ok){
         const currentUser = await res.json()
         store.setUser(currentUser)
-        router.push('/')
+        router.push(route.query.redirect ? route.query.redirect : '/')
       }else{
         message.error(await res.text())
       }
