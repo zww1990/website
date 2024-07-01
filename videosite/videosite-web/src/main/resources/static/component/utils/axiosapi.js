@@ -39,9 +39,8 @@ const userListApi = () => axios.get('/user/list')
 })
 
 const homeApi = id => {
-  let url = '/home'
   if(id){
-    return axios.get(url, { params: { 'categoryId': id } })
+    return axios.get('/home', { params: { 'categoryId': id } })
     .then(res => res.data)
     .catch(err => {
       console.log(err.message, err.response)
@@ -49,7 +48,7 @@ const homeApi = id => {
       return {}
     })
   }
-  return axios.get(url)
+  return axios.get('/home')
   .then(res => res.data)
   .catch(err => {
     console.log(err.message, err.response)
@@ -58,9 +57,8 @@ const homeApi = id => {
   })
 }
 
-const videoSearchApi = keyword => axios.get('/videohub/search', {
-  params: { 'keyword': keyword }
-}).then(res => res.data)
+const videoSearchApi = keyword => axios.get('/videohub/search', { params: { 'keyword': keyword } })
+.then(res => res.data)
 .catch(err => {
   console.log(err.message, err.response)
   message.error(err.response.data)
