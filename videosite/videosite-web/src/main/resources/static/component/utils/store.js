@@ -1,4 +1,4 @@
-import { logoutApi, videoSearchApi } from './fetchapi.js'
+import { logoutApi, videoSearchApi } from './axiosapi.js'
 
 const { ref, reactive } = Vue
 
@@ -20,8 +20,8 @@ export const store = reactive({
     this.user = null
     sessionStorage.removeItem('CURRENT_USER')
     logoutApi()
-      .then(res => res.text())
-      .then(res => console.log(res))
+      .then(res => console.log(res.data, res.status, res.statusText))
+      .catch(err => console.log(err.message, err.response))
   },
 
   getMenus() {

@@ -21,6 +21,7 @@
 		<ant-design-vue.version>4.2.3</ant-design-vue.version>
 		<dayjs.version>1.11.11</dayjs.version>
 		<font-awesome.version>4.7.0</font-awesome.version>
+		<axios.version>1.7.2</axios.version>
 	</properties>
 
 	<dependencies>
@@ -210,6 +211,26 @@
 			<groupId>org.webjars</groupId>
 			<artifactId>font-awesome</artifactId>
 			<version>${font-awesome.version}</version>
+		</dependency>
+		<!-- axios -->
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>axios</artifactId>
+			<version>${axios.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.webjars.npm</groupId>
+					<artifactId>follow-redirects</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.npm</groupId>
+					<artifactId>form-data</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.npm</groupId>
+					<artifactId>proxy-from-env</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 

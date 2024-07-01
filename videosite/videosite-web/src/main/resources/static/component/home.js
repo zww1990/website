@@ -1,4 +1,4 @@
-import { homeApi } from './utils/fetchapi.js'
+import { homeApi } from './utils/axiosapi.js'
 
 const { ref, reactive } = Vue
 
