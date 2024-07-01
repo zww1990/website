@@ -84,7 +84,8 @@ const videoShowApi = id => axios.get(`/videohub/show/${id}`)
 // 视频详情
 const videoEditApi = id => axios.get(`/videohub/edit/${id}`)
 
-const videoAuditApi = id => fetch(`/videohub/audit/${id}`)
+// 视频详情
+const videoAuditApi = id => axios.get(`/videohub/audit/${id}`)
 
 // 视频列表
 const videoListApi = () => axios.get('/videohub/list')
@@ -113,11 +114,8 @@ const videoHandleEditApi = params => {
   return axios.put('/videohub/edit', formData)
 }
 
-const videoHandleAuditApi = params => fetch('/videohub/audit', {
-  method: 'PUT',
-  body: JSON.stringify(params),
-  headers: { 'Content-Type': 'application/json' }
-})
+// 审核视频
+const videoHandleAuditApi = params => axios.put('/videohub/audit', params)
 
 export {
   loginApi,

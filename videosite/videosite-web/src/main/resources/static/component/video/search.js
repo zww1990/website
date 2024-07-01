@@ -1,7 +1,7 @@
 import { store } from '../utils/store.js'
 
 export default {
-  async setup() {
+  setup() {
     const router = VueRouter.useRouter()
     const handleClick = card => {
       router.push(`/video/show/${card.id}`)

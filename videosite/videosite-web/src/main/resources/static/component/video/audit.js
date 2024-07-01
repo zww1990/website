@@ -1,11 +1,11 @@
-import { videoAuditApi, videoHandleAuditApi } from '../utils/fetchapi.js'
+import { videoAuditApi, videoHandleAuditApi } from '../utils/axiosapi.js'
 import { store } from '../utils/store.js'
 
 const { message, notification } = antd
 const { ref, reactive } = Vue
 
 export default {
-  async setup() {
+  setup() {
     const router = VueRouter.useRouter()
     const route = VueRouter.useRoute()
     const audit = ref({
@@ -17,14 +17,11 @@ export default {
       { label: '审核不通过', value: 'UNPASSED' },
       ]
     })
-    const res = await videoAuditApi(audit.value.id)
     const video = ref({})
-    if(res.ok){
-      video.value = await res.json()
-    }else{
-      message.error(await res.text())
-    }
-    const handleSubmit = async () => {
+    videoAuditApi(audit.value.id)
+    .then(res => video.value = res.data)
+    .catch(err => message.error(err.response.data))
+    const handleSubmit = () => {
       if (!audit.value.auditStatus) {
         notification.error({ message: '操作错误', description: '请进行审核，方可提交！' })
         return
@@ -33,12 +30,9 @@ export default {
         notification.error({ message: '操作错误', description: '审核不通过时，请填写原因！' })
         return
       }
-      const res2 = await videoHandleAuditApi(audit.value)
-      if(res2.ok){
-        router.push('/video/auditsuc')
-      }else{
-        notification.error({ message: '操作错误', description: await res2.text() })
-      }
+      videoHandleAuditApi(audit.value)
+      .then(res => router.push('/video/auditsuc'))
+      .catch(err => notification.error({ message: '操作错误', description: err.response.data }))
     }
     return { video, audit, handleSubmit }
   },
