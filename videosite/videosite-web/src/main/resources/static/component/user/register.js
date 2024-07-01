@@ -1,4 +1,4 @@
-import { registerApi } from '../utils/fetchapi.js'
+import { registerApi } from '../utils/axiosapi.js'
 
 const { ref, reactive } = Vue
 const { message } = antd
@@ -12,13 +12,10 @@ export default {
       password: '',
       password2: ''
     })
-    const onFinish = async values => {
-      const res = await registerApi(values)
-      if(res.ok){
-        router.push('/success')
-      }else{
-        message.error(await res.text())
-      }
+    const onFinish = values => {
+      registerApi(values)
+      .then(res => router.push('/success'))
+      .catch(err => message.error(err.response.data))
     }
     const validatePass2 = async (_rule, value) => {
       if (value === '') {

@@ -16,11 +16,7 @@ const commentAddApi = params => fetch('/comment/add', {
 
 const loginApi = params => axios.post('/user/login', params)
 
-const registerApi = params => fetch('/user/register', {
-  method: 'POST',
-  body: JSON.stringify(params),
-  headers: { 'Content-Type': 'application/json' }
-})
+const registerApi = params => axios.post('/user/register', params)
 
 const logoutApi = () => axios.get('/user/logout')
 .then(res => console.log(res.data, res.status, res.statusText))
