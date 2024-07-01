@@ -1,4 +1,4 @@
-import { videoAddApi, categoryListApi } from '../utils/fetchapi.js'
+import { videoAddApi, categoryListApi } from '../utils/axiosapi.js'
 
 const { ref, reactive } = Vue
 const { message, Upload } = antd
@@ -12,13 +12,10 @@ export default {
       videoLogo: null,
       videoLink: null,
     })
-    const onFinish = async values => {
-      const res = await videoAddApi(values)
-      if(res.ok){
-        router.push('/video/addsuc')
-      }else{
-        message.error(await res.text())
-      }
+    const onFinish = values => {
+      videoAddApi(values)
+      .then(res => router.push('/video/addsuc'))
+      .catch(err => message.error(err.response.data))
     }
     const categories = (await categoryListApi()).map(({ id, categoryName }) => {
       return { label: categoryName, value: id }

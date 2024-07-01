@@ -3,7 +3,14 @@ const { message } = antd
 // 添加视频分类
 const categoryAddApi = params => axios.post('/category/add', params)
 
-const categoryListApi = async () => await (await fetch('/category/list')).json()
+// 视频分类列表
+const categoryListApi = () => axios.get('/category/list')
+.then(res => res.data)
+.catch(err => {
+  console.log(err.message, err.response)
+  message.error(err.response.data)
+  return []
+})
 
 const commentAddApi = params => fetch('/comment/add', {
   method: 'POST',
@@ -76,13 +83,11 @@ const videoAuditApi = id => fetch(`/videohub/audit/${id}`)
 
 const videoListApi = () => fetch('/videohub/list')
 
+// 添加视频
 const videoAddApi = params => {
   const formData = new FormData()
   Object.entries(params).forEach(([ k, v ]) => formData.append(k, v))
-  return fetch('/videohub/add', {
-    method: 'POST',
-    body: formData,
-  })
+  return axios.post('/videohub/add', formData)
 }
 
 const videoHandleEditApi = params => {
