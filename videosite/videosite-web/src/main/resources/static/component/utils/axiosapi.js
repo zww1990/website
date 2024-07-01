@@ -12,11 +12,8 @@ const categoryListApi = () => axios.get('/category/list')
   return []
 })
 
-const commentAddApi = params => fetch('/comment/add', {
-  method: 'POST',
-  body: JSON.stringify(params),
-  headers: { 'Content-Type': 'application/json' }
-})
+// 添加视频评论
+const commentAddApi = params => axios.post('/comment/add', params)
 
 // 用户登录
 const loginApi = params => axios.post('/user/login', params)
@@ -70,11 +67,19 @@ const videoSearchApi = keyword => axios.get('/videohub/search', { params: { 'key
 // 删除视频
 const videoDelApi = params => axios.delete(`/videohub/delete/${params.id}`)
 
-const videoAddHitsApi = id => fetch(`/videohub/addhits/${id}`, {
-  method: 'PUT'
-})
+// 添加视频点击量
+const videoAddHitsApi = id => axios.put(`/videohub/addhits/${id}`)
+.then(res => console.log(res.data, res.status, res.statusText))
+.catch(err => console.log(err.message, err.response))
 
-const videoShowApi = id => fetch(`/videohub/show/${id}`)
+// 视频详情
+const videoShowApi = id => axios.get(`/videohub/show/${id}`)
+.then(res => res.data)
+.catch(err => {
+  console.log(err.message, err.response)
+  message.error(err.response.data)
+  return {}
+})
 
 const videoEditApi = id => fetch(`/videohub/edit/${id}`)
 
