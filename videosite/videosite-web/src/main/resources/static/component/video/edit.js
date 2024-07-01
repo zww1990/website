@@ -1,4 +1,4 @@
-import { videoEditApi, categoryListApi, videoHandleEditApi } from '../utils/fetchapi.js'
+import { videoEditApi, categoryListApi, videoHandleEditApi } from '../utils/axiosapi.js'
 
 const { ref, reactive } = Vue
 const { message, Upload } = antd
@@ -16,9 +16,8 @@ export default {
       videoFileList: [],
       imageFileList: [],
     })
-    const res2 = await videoEditApi(formState.id)
-    if(res2.ok){
-      const data = await res2.json()
+    videoEditApi(formState.id).then(res => {
+      const data = res.data
       formState.videoName = data.videoName
       formState.categoryId = data.categoryId
       formState.imageFileList = [{
@@ -33,16 +32,11 @@ export default {
         status: 'done',
         url: data.videoLink
       }]
-    }else{
-      message.error(await res2.text())
-    }
-    const onFinish = async values => {
-      const res = await videoHandleEditApi(formState)
-      if(res.ok){
-        router.push('/video/editsuc')
-      }else{
-        message.error(await res.text())
-      }
+    }).catch(err => message.error(err.response.data))
+    const onFinish = values => {
+      videoHandleEditApi(formState)
+      .then(res => router.push('/video/editsuc'))
+      .catch(err => message.error(err.response.data))
     }
     const categories = (await categoryListApi()).map(({ id, categoryName }) => {
       return { label: categoryName, value: id }

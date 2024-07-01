@@ -81,7 +81,8 @@ const videoShowApi = id => axios.get(`/videohub/show/${id}`)
   return {}
 })
 
-const videoEditApi = id => fetch(`/videohub/edit/${id}`)
+// 视频详情
+const videoEditApi = id => axios.get(`/videohub/edit/${id}`)
 
 const videoAuditApi = id => fetch(`/videohub/audit/${id}`)
 
@@ -101,6 +102,7 @@ const videoAddApi = params => {
   return axios.post('/videohub/add', formData)
 }
 
+// 编辑视频
 const videoHandleEditApi = params => {
   const formData = new FormData()
   Object.entries(params).forEach(([ k, v ]) => {
@@ -108,10 +110,7 @@ const videoHandleEditApi = params => {
       formData.append(k, v)
     }
   })
-  return fetch('/videohub/edit', {
-    method: 'PUT',
-    body: formData,
-  })
+  return axios.put('/videohub/edit', formData)
 }
 
 const videoHandleAuditApi = params => fetch('/videohub/audit', {
