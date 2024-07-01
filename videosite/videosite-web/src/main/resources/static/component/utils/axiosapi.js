@@ -1,3 +1,5 @@
+const { message } = antd
+
 const categoryAddApi = params => fetch('/category/add', {
   method: 'POST',
   body: JSON.stringify(params),
@@ -25,8 +27,18 @@ const registerApi = params => fetch('/user/register', {
 })
 
 const logoutApi = () => axios.get('/user/logout')
+      .then(res => console.log(res.data, res.status, res.statusText))
+      .catch(err => console.log(err.message, err.response))
 
-const userListApi = () => fetch('/user/list')
+const userListApi = async () => {
+  try{
+    return (await axios.get('/user/list')).data
+  }catch(err){
+    console.log(err.message, err.response)
+    message.error(err.response.data)
+    return []
+  }
+}
 
 const homeApi = async (id) => {
   let url = '/home'

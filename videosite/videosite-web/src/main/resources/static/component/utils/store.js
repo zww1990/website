@@ -20,8 +20,6 @@ export const store = reactive({
     this.user = null
     sessionStorage.removeItem('CURRENT_USER')
     logoutApi()
-      .then(res => console.log(res.data, res.status, res.statusText))
-      .catch(err => console.log(err.message, err.response))
   },
 
   getMenus() {

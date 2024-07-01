@@ -1,16 +1,8 @@
-import { userListApi } from '../utils/fetchapi.js'
-
-const { message } = antd
+import { userListApi } from '../utils/axiosapi.js'
 
 export default {
   async setup() {
-    const res = await userListApi()
-    let dataSource = []
-    if(res.ok){
-      dataSource = await res.json()
-    }else{
-      message.error(await res.text())
-    }
+    const dataSource = await userListApi()
     const columns = [
       { title: '主键', dataIndex: 'id', },
       { title: '用户名', dataIndex: 'username', },
