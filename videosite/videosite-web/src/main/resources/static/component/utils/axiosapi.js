@@ -67,9 +67,8 @@ const videoSearchApi = keyword => axios.get('/videohub/search', { params: { 'key
   return []
 })
 
-const videoDelApi = params => fetch(`/videohub/delete/${params.id}`, {
-  method: 'DELETE'
-})
+// 删除视频
+const videoDelApi = params => axios.delete(`/videohub/delete/${params.id}`)
 
 const videoAddHitsApi = id => fetch(`/videohub/addhits/${id}`, {
   method: 'PUT'
@@ -81,7 +80,14 @@ const videoEditApi = id => fetch(`/videohub/edit/${id}`)
 
 const videoAuditApi = id => fetch(`/videohub/audit/${id}`)
 
-const videoListApi = () => fetch('/videohub/list')
+// 视频列表
+const videoListApi = () => axios.get('/videohub/list')
+.then(res => res.data)
+.catch(err => {
+  console.log(err.message, err.response)
+  message.error(err.response.data)
+  return []
+})
 
 // 添加视频
 const videoAddApi = params => {
