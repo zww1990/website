@@ -27,34 +27,45 @@ const registerApi = params => fetch('/user/register', {
 })
 
 const logoutApi = () => axios.get('/user/logout')
-      .then(res => console.log(res.data, res.status, res.statusText))
-      .catch(err => console.log(err.message, err.response))
+.then(res => console.log(res.data, res.status, res.statusText))
+.catch(err => console.log(err.message, err.response))
 
-const userListApi = async () => {
-  try{
-    return (await axios.get('/user/list')).data
-  }catch(err){
-    console.log(err.message, err.response)
-    message.error(err.response.data)
-    return []
-  }
-}
+const userListApi = () => axios.get('/user/list')
+.then(res => res.data)
+.catch(err => {
+  console.log(err.message, err.response)
+  message.error(err.response.data)
+  return []
+})
 
-const homeApi = async (id) => {
+const homeApi = id => {
   let url = '/home'
   if(id){
-    return (await axios.get(url, {
-      params: { 'categoryId': id }
-    })).data
+    return axios.get(url, { params: { 'categoryId': id } })
+    .then(res => res.data)
+    .catch(err => {
+      console.log(err.message, err.response)
+      message.error(err.response.data)
+      return {}
+    })
   }
-  return (await axios.get(url)).data
+  return axios.get(url)
+  .then(res => res.data)
+  .catch(err => {
+    console.log(err.message, err.response)
+    message.error(err.response.data)
+    return {}
+  })
 }
 
-const videoSearchApi = async (keyword) => {
-  return (await axios.get('/videohub/search', {
-    params: { 'keyword': keyword }
-  })).data
-}
+const videoSearchApi = keyword => axios.get('/videohub/search', {
+  params: { 'keyword': keyword }
+}).then(res => res.data)
+.catch(err => {
+  console.log(err.message, err.response)
+  message.error(err.response.data)
+  return []
+})
 
 const videoDelApi = params => fetch(`/videohub/delete/${params.id}`, {
   method: 'DELETE'
