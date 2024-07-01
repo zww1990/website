@@ -1,4 +1,4 @@
-import { loginApi } from '../utils/fetchapi.js'
+import { loginApi } from '../utils/axiosapi.js'
 import { store } from '../utils/store.js'
 
 const { ref, reactive } = Vue
@@ -9,15 +9,11 @@ export default {
     const router = VueRouter.useRouter()
     const route = VueRouter.useRoute()
     const formState = reactive({ username: '', password: '' })
-    const onFinish = async values => {
-      const res = await loginApi(values)
-      if(res.ok){
-        const currentUser = await res.json()
-        store.setUser(currentUser)
+    const onFinish = values => {
+      loginApi(values).then(res => {
+        store.setUser(res.data)
         router.push(route.query.redirect ? route.query.redirect : '/')
-      }else{
-        message.error(await res.text())
-      }
+      }).catch(err => message.error(err.response.data))
     }
     return { onFinish, formState }
   },

@@ -14,11 +14,7 @@ const commentAddApi = params => fetch('/comment/add', {
   headers: { 'Content-Type': 'application/json' }
 })
 
-const loginApi = params => fetch('/user/login', {
-  method: 'POST',
-  body: JSON.stringify(params),
-  headers: { 'Content-Type': 'application/json' }
-})
+const loginApi = params => axios.post('/user/login', params)
 
 const registerApi = params => fetch('/user/register', {
   method: 'POST',
