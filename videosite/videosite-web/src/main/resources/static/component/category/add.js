@@ -1,4 +1,4 @@
-import { categoryAddApi } from '../utils/fetchapi.js'
+import { categoryAddApi } from '../utils/axiosapi.js'
 
 const { ref, reactive } = Vue
 const { message } = antd
@@ -7,13 +7,10 @@ export default {
   setup() {
     const router = VueRouter.useRouter()
     const formState = reactive({ categoryName: '' })
-    const onFinish = async values => {
-      const res = await categoryAddApi(values)
-      if(res.ok){
-        router.push('/cate/success')
-      }else{
-        message.error(await res.text())
-      }
+    const onFinish = values => {
+      categoryAddApi(values)
+      .then(res => router.push('/cate/success'))
+      .catch(err => message.error(err.response.data))
     }
     return { onFinish, formState }
   },

@@ -1,10 +1,7 @@
 const { message } = antd
 
-const categoryAddApi = params => fetch('/category/add', {
-  method: 'POST',
-  body: JSON.stringify(params),
-  headers: { 'Content-Type': 'application/json' }
-})
+// 添加视频分类
+const categoryAddApi = params => axios.post('/category/add', params)
 
 const categoryListApi = async () => await (await fetch('/category/list')).json()
 
@@ -14,14 +11,18 @@ const commentAddApi = params => fetch('/comment/add', {
   headers: { 'Content-Type': 'application/json' }
 })
 
+// 用户登录
 const loginApi = params => axios.post('/user/login', params)
 
+// 用户注册
 const registerApi = params => axios.post('/user/register', params)
 
+// 用户注销
 const logoutApi = () => axios.get('/user/logout')
 .then(res => console.log(res.data, res.status, res.statusText))
 .catch(err => console.log(err.message, err.response))
 
+// 用户列表
 const userListApi = () => axios.get('/user/list')
 .then(res => res.data)
 .catch(err => {
@@ -30,6 +31,7 @@ const userListApi = () => axios.get('/user/list')
   return []
 })
 
+// 首页
 const homeApi = id => {
   if(id){
     return axios.get('/home', { params: { 'categoryId': id } })
@@ -49,6 +51,7 @@ const homeApi = id => {
   })
 }
 
+//视频搜索
 const videoSearchApi = keyword => axios.get('/videohub/search', { params: { 'keyword': keyword } })
 .then(res => res.data)
 .catch(err => {
