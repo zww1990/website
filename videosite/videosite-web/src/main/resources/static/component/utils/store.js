@@ -7,8 +7,7 @@ export const store = reactive({
   videos: [],
 
   async setVideos(keyword){
-    const videos = await videoSearchApi(keyword)
-    this.videos = videos
+    this.videos = await videoSearchApi(keyword)
   },
 
   setUser(currentUser) {
