@@ -1,3 +1,5 @@
+import { store } from './store.js'
+
 const { message } = antd
 
 // 添加视频分类
@@ -116,6 +118,16 @@ const videoHandleEditApi = params => {
 
 // 审核视频
 const videoHandleAuditApi = params => axios.put('/videohub/audit', params)
+
+// 添加响应拦截器
+axios.interceptors.response.use(res => {
+  return res
+}, err => {
+  if(err.response.status === 401){
+    store.clearUser()
+  }
+  return Promise.reject(err)
+})
 
 export {
   loginApi,

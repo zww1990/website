@@ -22,7 +22,7 @@ export default {
 
     const handleClick = ( key ) => {
       if(key === '/logout'){
-        store.clearUser()
+        store.clearUser(true)
         router.push('/')
         message.success('您已安全退出系统。')
       }else{
