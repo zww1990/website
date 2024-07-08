@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.client.HttpClientErrorException;
 
 @SpringBootTest
@@ -21,26 +22,27 @@ public class VideoSiteApplicationTests {
 
     @Test
     public void testContextLoads() throws Exception {
-        ObjectWriter json = applicationContext.getBean(ObjectMapper.class).writerWithDefaultPrettyPrinter();
+        System.err.println(this.applicationContext.getBeansOfType(UserDetailsService.class));
+//        ObjectWriter json = applicationContext.getBean(ObjectMapper.class).writerWithDefaultPrettyPrinter();
 //        System.err.println(json.writeValueAsString(ResponseEntity.ok("hello world")));
 //        System.err.println(json.writeValueAsString(ResponseEntity.internalServerError().body("what the fuck")));
 //        System.err.println(json.writeValueAsString(ResponseEntity.notFound().build()));
-        System.err.println(json.writeValueAsString(
-                ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(HttpStatus.NOT_FOUND.toString())
-        ));
-        System.err.println(json.writeValueAsString(
-                ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(new EntityNotFoundException("此视频不存在").getLocalizedMessage())
-        ));
-        HttpClientErrorException ex = new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
-        System.err.println(json.writeValueAsString(
-                ResponseEntity.status(ex.getStatusCode())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(ex.getLocalizedMessage())
-        ));
+//        System.err.println(json.writeValueAsString(
+//                ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .body(HttpStatus.NOT_FOUND.toString())
+//        ));
+//        System.err.println(json.writeValueAsString(
+//                ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .body(new EntityNotFoundException("此视频不存在").getLocalizedMessage())
+//        ));
+//        HttpClientErrorException ex = new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+//        System.err.println(json.writeValueAsString(
+//                ResponseEntity.status(ex.getStatusCode())
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .body(ex.getLocalizedMessage())
+//        ));
     }
 
     @Test

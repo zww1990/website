@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  */
 @Slf4j
 @AllArgsConstructor
-@Component
+//@Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
     private final PathPatternParser pathPatternParser = new PathPatternParser();
     private final VideoSiteAppProperties appProps;

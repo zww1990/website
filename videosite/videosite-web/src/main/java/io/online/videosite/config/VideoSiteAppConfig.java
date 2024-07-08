@@ -9,14 +9,17 @@ import org.springframework.boot.web.server.ErrorPageRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.util.UrlPathHelper;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * 自定义Spring MVC配置类
@@ -24,19 +27,11 @@ import org.springframework.web.util.UrlPathHelper;
  * @author 张维维
  */
 @Configuration
+@EnableWebSecurity
 @AllArgsConstructor
 @Slf4j
 public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar {
     private final VideoSiteAppProperties appProps;
-    private final AuthenticationInterceptor authenticationInterceptor;
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        log.info("{}", this.appProps);
-        registry.addInterceptor(this.authenticationInterceptor)
-                .addPathPatterns(this.appProps.getIncludePathPatterns())
-                .excludePathPatterns(this.appProps.getExcludePathPatterns());
-    }
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
@@ -66,5 +61,19 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
     @Override
     public void registerErrorPages(ErrorPageRegistry registry) {
         registry.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/index.html"));
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.cors(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize ->
+                        authorize.requestMatchers(this.appProps.getExcludePathPatterns()).permitAll()
+                                .requestMatchers(this.appProps.getIncludePathPatterns()).authenticated()
+                                .requestMatchers(this.appProps.getAdminPathPatterns()).hasRole("ADMIN")
+                                .anyRequest().permitAll())
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable);
+        return http.build();
     }
 }
