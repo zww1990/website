@@ -25,8 +25,9 @@ public class CategoryController {
      * 处理添加类别
      */
     @PostMapping(path = "/add")
-    public ResponseEntity<?> handleAdd(@RequestBody Category category,
-                                       @SessionAttribute(Constants.SESSION_USER_KEY) User user) {
+    public ResponseEntity<?> handleAdd(
+            @RequestBody Category category,
+            @SessionAttribute(Constants.SESSION_USER_KEY) User user) {
         if (!StringUtils.hasText(category.getCategoryName())) {
             return ResponseEntity.badRequest()
                     .contentType(MediaType.APPLICATION_JSON)

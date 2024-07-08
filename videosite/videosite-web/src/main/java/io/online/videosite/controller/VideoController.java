@@ -22,7 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.util.pattern.PathPatternParser;
 
-import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
@@ -88,8 +89,9 @@ public class VideoController {
      * 增加播放量
      */
     @PutMapping(path = "/addhits/{id}")
-    public Object addHits(@PathVariable Integer id,
-                          @SessionAttribute(name = Constants.SESSION_USER_KEY, required = false) User user) {
+    public Object addHits(
+            @PathVariable Integer id,
+            @SessionAttribute(name = Constants.SESSION_USER_KEY, required = false) User user) {
         Video video = this.videoService.queryOne(id, FetchType.LAZY);
         // 如果视频不存在
         if (video == null) {
@@ -118,8 +120,9 @@ public class VideoController {
      * 处理审核
      */
     @PutMapping(path = "/audit")
-    public ResponseEntity<?> handleAudit(@RequestBody Video param,
-                                         @SessionAttribute(Constants.SESSION_USER_KEY) User user) {
+    public ResponseEntity<?> handleAudit(
+            @RequestBody Video param,
+            @SessionAttribute(Constants.SESSION_USER_KEY) User user) {
         if (param.getId() == null) {
             return ResponseEntity.badRequest()
                     .contentType(MediaType.APPLICATION_JSON)
@@ -149,8 +152,9 @@ public class VideoController {
      * 处理删除
      */
     @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable Integer id,
-                                    @SessionAttribute(Constants.SESSION_USER_KEY) User user) {
+    public ResponseEntity<?> delete(
+            @PathVariable Integer id,
+            @SessionAttribute(Constants.SESSION_USER_KEY) User user) {
         Video video = this.videoService.queryOne(id, FetchType.LAZY);
         // 如果视频不存在
         if (video == null) {
@@ -168,8 +172,9 @@ public class VideoController {
      * 处理添加
      */
     @PostMapping(path = "/add")
-    public ResponseEntity<?> handleAdd(@ModelAttribute VideoModel model,
-                                       @SessionAttribute(Constants.SESSION_USER_KEY) User user) throws IOException {
+    public ResponseEntity<?> handleAdd(
+            @ModelAttribute VideoModel model,
+            @SessionAttribute(Constants.SESSION_USER_KEY) User user) throws Exception {
         if (!StringUtils.hasText(model.getVideoName())) {
             return ResponseEntity.badRequest()
                     .contentType(MediaType.APPLICATION_JSON)
@@ -209,7 +214,9 @@ public class VideoController {
         // 先保存数据
         this.videoService.save(model, user);
         // 然后再写入文件，避免保存失败，上传临时文件。
+        this.createDirectories(this.appProps.getImageUploadFolder());
         model.getVideoLogo().transferTo(Paths.get(this.appProps.getImageUploadFolder(), model.getVideoLogoPath()));
+        this.createDirectories(this.appProps.getVideoUploadFolder());
         model.getVideoLink().transferTo(Paths.get(this.appProps.getVideoUploadFolder(), model.getVideoLinkPath()));
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -233,8 +240,9 @@ public class VideoController {
      * 处理编辑
      */
     @PutMapping(path = "/edit")
-    public ResponseEntity<?> handleEdit(@SessionAttribute(Constants.SESSION_USER_KEY) User user,
-                                        @ModelAttribute VideoModel model) throws IOException {
+    public ResponseEntity<?> handleEdit(
+            @SessionAttribute(Constants.SESSION_USER_KEY) User user,
+            @ModelAttribute VideoModel model) throws Exception {
         if (model.getId() == null) {
             return ResponseEntity.badRequest()
                     .contentType(MediaType.APPLICATION_JSON)
@@ -286,10 +294,12 @@ public class VideoController {
         // 然后再写入视频封面、文件，避免保存失败，上传临时文件。
         if (model.getVideoLogo() != null && !model.getVideoLogo().isEmpty()) {
             // 写入文件
+            this.createDirectories(this.appProps.getImageUploadFolder());
             model.getVideoLogo().transferTo(Paths.get(this.appProps.getImageUploadFolder(), model.getVideoLogoPath()));
         }
         if (model.getVideoLink() != null && !model.getVideoLink().isEmpty()) {
             // 写入文件
+            this.createDirectories(this.appProps.getVideoUploadFolder());
             model.getVideoLink().transferTo(Paths.get(this.appProps.getVideoUploadFolder(), model.getVideoLinkPath()));
         }
         return ResponseEntity.ok()
@@ -315,4 +325,11 @@ public class VideoController {
         return String.format("%s.%s", uuid, StringUtils.getFilenameExtension(originFileName));
     }
 
+    private void createDirectories(String uploadFolder) throws Exception {
+        Path path = Paths.get(uploadFolder);
+        if (Files.notExists(path)) {
+            // 创建上传目录
+            Files.createDirectories(path);
+        }
+    }
 }

@@ -30,8 +30,9 @@ public class CommentController {
      * 处理添加评论
      */
     @PostMapping(path = "/add")
-    public ResponseEntity<?> add(@RequestBody Comment comment,
-                                 @SessionAttribute(Constants.SESSION_USER_KEY) User user) {
+    public ResponseEntity<?> add(
+            @RequestBody Comment comment,
+            @SessionAttribute(Constants.SESSION_USER_KEY) User user) {
         if (comment.getVideoId() == null) {
             return ResponseEntity.badRequest()
                     .contentType(MediaType.APPLICATION_JSON)

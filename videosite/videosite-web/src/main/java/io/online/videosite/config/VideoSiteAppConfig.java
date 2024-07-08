@@ -3,7 +3,6 @@ package io.online.videosite.config;
 import io.online.videosite.properties.VideoSiteAppProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.ErrorPageRegistrar;
 import org.springframework.boot.web.server.ErrorPageRegistry;
@@ -19,10 +18,6 @@ import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.util.UrlPathHelper;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 /**
  * 自定义Spring MVC配置类
  *
@@ -31,7 +26,7 @@ import java.nio.file.Paths;
 @Configuration
 @AllArgsConstructor
 @Slf4j
-public class VideoSiteAppConfig implements WebMvcConfigurer, CommandLineRunner, ErrorPageRegistrar {
+public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar {
     private final VideoSiteAppProperties appProps;
     private final AuthenticationInterceptor authenticationInterceptor;
 
@@ -66,20 +61,6 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, CommandLineRunner, 
     @Bean
     static PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-        Path image = Paths.get(this.appProps.getImageUploadFolder());
-        if (Files.notExists(image)) {
-            // 创建上传图片目录
-            Files.createDirectories(image);
-        }
-        Path video = Paths.get(this.appProps.getVideoUploadFolder());
-        if (Files.notExists(video)) {
-            // 创建上传视频目录
-            Files.createDirectories(video);
-        }
     }
 
     @Override
