@@ -5,6 +5,8 @@ import io.online.videosite.constant.UserType;
 import io.online.videosite.domain.User;
 import io.online.videosite.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,5 +37,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> queryUsers() {
         return this.userRepository.findAll();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.userRepository.findByUsername(username).orElse(null);
     }
 }

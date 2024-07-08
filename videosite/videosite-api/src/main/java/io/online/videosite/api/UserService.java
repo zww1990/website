@@ -1,6 +1,7 @@
 package io.online.videosite.api;
 
 import io.online.videosite.domain.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  *
  * @author 张维维
  */
-public interface UserService {
+public interface UserService extends UserDetailsService {
     /**
      * 按用户名查询用户信息
      *

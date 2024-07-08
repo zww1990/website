@@ -22,4 +22,13 @@ public class UserServiceTests {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void testLoadUserByUsername() {
+        try {
+            System.err.println(this.userService.loadUserByUsername("admin"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
