@@ -6,6 +6,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.core.CredentialsContainer;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Set;
 
 /**
  * 用户实体类
@@ -17,7 +21,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails, CredentialsContainer {
     /**
      * 用户名
      */
@@ -44,4 +48,34 @@ public class User extends BaseEntity {
      */
     @Enumerated(EnumType.STRING)
     private UserType userType;
+    /**
+     * 权限集合
+     */
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "t_user_authority",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "auth_id", referencedColumnName = "id"))
+    private Set<Authority> authorities;
+    /**
+     * 帐户是否未过期
+     */
+    private boolean accountNonExpired;
+    /**
+     * 帐户是否未锁定
+     */
+    private boolean accountNonLocked;
+    /**
+     * 密码是否未过期
+     */
+    private boolean credentialsNonExpired;
+    /**
+     * 帐户是否已启用
+     */
+    private boolean enabled;
+
+    @Override
+    public void eraseCredentials() {
+        this.password = null;
+        this.password2 = null;
+    }
 }
