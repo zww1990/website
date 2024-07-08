@@ -161,12 +161,10 @@ public class VideoServiceImpl implements VideoService {
                     VideoHistory tmp = new VideoHistory();
                     tmp.setPlayCount(0);
                     tmp.setVideoId(id);
-                    tmp.setCreatedDate(LocalDateTime.now());
                     tmp.setCreator(user.getUsername());
                     return tmp;
                 });
                 vh.setPlayCount(vh.getPlayCount() + 1);
-                vh.setModifiedDate(LocalDateTime.now());
                 vh.setModifier(user.getUsername());
                 this.videoHistoryRepository.save(vh);
             });
@@ -179,7 +177,6 @@ public class VideoServiceImpl implements VideoService {
         log.info("audit(): video = {}, user = {}", video, user);
         video.setAuditor(user.getUsername());
         video.setAuditedDate(LocalDateTime.now());
-        video.setModifiedDate(video.getAuditedDate());
         video.setModifier(user.getUsername());
         video.setVideoLogo(video.getVideoLogo()
                 .replace(this.appProps.getImageUploadFolder(), "")
@@ -199,14 +196,12 @@ public class VideoServiceImpl implements VideoService {
         video.setVideoHits(0);
         video.setVideoLogo(model.getVideoLogoPath());
         video.setVideoLink(model.getVideoLinkPath());
-        video.setCreatedDate(LocalDateTime.now());
-        video.setModifiedDate(video.getCreatedDate());
         video.setCreator(user.getUsername());
         video.setModifier(user.getUsername());
         if (user.getUserType() == UserType.ADMIN) {
             // 如果是管理员用户添加视频，直接审核通过
             video.setAuditStatus(AuditStatus.PASSED);
-            video.setAuditedDate(video.getCreatedDate());
+            video.setAuditedDate(LocalDateTime.now());
             video.setAuditor(user.getUsername());
         } else {
             video.setAuditStatus(AuditStatus.PENDING);
@@ -263,12 +258,11 @@ public class VideoServiceImpl implements VideoService {
         video.setVideoName(model.getVideoName());
         video.setCategoryId(model.getCategoryId());
         video.setVideoHits(0);
-        video.setModifiedDate(LocalDateTime.now());
         video.setModifier(user.getUsername());
         if (user.getUserType() == UserType.ADMIN) {
             // 如果是管理员用户添加视频，直接审核通过
             video.setAuditStatus(AuditStatus.PASSED);
-            video.setAuditedDate(video.getModifiedDate());
+            video.setAuditedDate(LocalDateTime.now());
             video.setAuditor(user.getUsername());
         } else {
             video.setAuditStatus(AuditStatus.PENDING);

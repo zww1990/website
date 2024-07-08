@@ -30,8 +30,6 @@ public class CommentRepositoryTests {
             Comment entity = new Comment();
             entity.setContent("泰裤辣" + now);
             entity.setVideoId(1);
-            entity.setCreatedDate(now);
-            entity.setModifiedDate(now);
             entity.setCreator(name);
             entity.setModifier(name);
             this.commentRepository.saveAll(List.of(entity)).forEach(System.err::println);

@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -37,8 +36,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void save(Category category, User user) {
         log.info("save(): category = {}, user = {}", category, user);
-        category.setCreatedDate(LocalDateTime.now());
-        category.setModifiedDate(category.getCreatedDate());
         category.setCreator(user.getUsername());
         category.setModifier(user.getUsername());
         this.categoryRepository.save(category);

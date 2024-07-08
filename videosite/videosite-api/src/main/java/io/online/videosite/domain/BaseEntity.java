@@ -29,6 +29,7 @@ public abstract class BaseEntity {
      * 创建时间
      */
     @JsonFormat(pattern = Constants.JSONFORMAT_DATETIME, timezone = Constants.JSONFORMAT_TIMEZONE)
+    @Column(insertable = false, updatable = false)
     private LocalDateTime createdDate;
     /**
      * 创建人
@@ -43,6 +44,7 @@ public abstract class BaseEntity {
      * 修改时间
      */
     @JsonFormat(pattern = Constants.JSONFORMAT_DATETIME, timezone = Constants.JSONFORMAT_TIMEZONE)
+    @Column(insertable = false, updatable = false)
     private LocalDateTime modifiedDate;
     /**
      * 修改人

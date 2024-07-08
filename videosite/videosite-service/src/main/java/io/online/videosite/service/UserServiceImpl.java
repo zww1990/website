@@ -7,7 +7,6 @@ import io.online.videosite.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -29,8 +28,6 @@ public class UserServiceImpl implements UserService {
     public void save(User user) {
         user.setCreator(user.getUsername());
         user.setModifier(user.getUsername());
-        user.setCreatedDate(LocalDateTime.now());
-        user.setModifiedDate(user.getCreatedDate());
         user.setUserType(UserType.NORMAL);
         this.userRepository.save(user);
     }

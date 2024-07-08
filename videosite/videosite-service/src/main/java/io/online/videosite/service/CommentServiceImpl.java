@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,8 +52,6 @@ public class CommentServiceImpl implements CommentService {
         log.info("save(): comment = {}, user = {}", comment, user);
         comment.setCreator(user.getUsername());
         comment.setModifier(user.getUsername());
-        comment.setCreatedDate(LocalDateTime.now());
-        comment.setModifiedDate(comment.getCreatedDate());
         this.commentRepository.save(comment);
     }
 }
