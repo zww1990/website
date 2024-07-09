@@ -24,7 +24,7 @@ public class VideoSiteAppProperties {
     /**
      * 拦截器排除的路径模式
      */
-    private String[] excludePathPatterns = {"/videohub/show/**", "/category/list"};
+    private String[] excludePathPatterns = {"/videohub/show/**", "/videohub/addhits/**", "/videohub/search", "/category/list"};
     /**
      * 需要管理员身份的路径模式
      */
