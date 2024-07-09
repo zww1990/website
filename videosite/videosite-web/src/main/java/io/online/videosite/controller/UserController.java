@@ -38,7 +38,7 @@ public class UserController {
      * 处理用户登录
      */
     @PostMapping(path = "/login")
-    public ResponseEntity<?> login(@RequestBody User user, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody User user) {
         log.info("login(): user = {}", user);
         if (!StringUtils.hasText(user.getUsername())) {
             return ResponseEntity.badRequest()
