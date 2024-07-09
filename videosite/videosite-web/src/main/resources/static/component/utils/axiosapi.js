@@ -123,7 +123,7 @@ const videoHandleAuditApi = params => axios.put('/videohub/audit', params)
 axios.interceptors.response.use(res => {
   return res
 }, err => {
-  if(err.response.status === 401){
+  if([401, 403].includes(err.response.status)){
     store.clearUser()
   }
   return Promise.reject(err)
