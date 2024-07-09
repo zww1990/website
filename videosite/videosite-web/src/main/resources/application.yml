@@ -43,18 +43,17 @@ spring:
 
 videosite-app:
   include-path-patterns:
-    - /category/**
-    - /comment/**
-    - /videohub/**
+    - /category/add
+    - /comment/add
+    - /videohub/audit
+    - /videohub/edit
+    - /videohub/add
+    - /videohub/delete
+    - /videohub/list
     - /user/list
-  exclude-path-patterns:
-    - /videohub/show/**
-    - /videohub/addhits/**
-    - /videohub/search
-    - /category/list
   admin-path-patterns:
-    - /category/**
-    - /videohub/audit/**
+    - /category/add
+    - /videohub/audit
     - /user/list
   image-mime-patterns: image/*
   video-mime-patterns: video/*

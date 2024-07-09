@@ -70,8 +70,8 @@ public class VideoController {
     /**
      * 跳转到查看页面
      */
-    @GetMapping(path = "/show/{id}")
-    public ResponseEntity<?> show(@PathVariable Integer id) {
+    @GetMapping(path = "/show")
+    public ResponseEntity<?> show(@RequestParam Integer id) {
         Video video = this.videoService.queryOne(id, FetchType.EAGER);
         // 如果视频不存在
         if (video == null) {
@@ -88,9 +88,9 @@ public class VideoController {
     /**
      * 增加播放量
      */
-    @PutMapping(path = "/addhits/{id}")
+    @PutMapping(path = "/addhits")
     public Object addHits(
-            @PathVariable Integer id,
+            @RequestParam Integer id,
             @SessionAttribute(name = Constants.SESSION_USER_KEY, required = false) User user) {
         Video video = this.videoService.queryOne(id, FetchType.LAZY);
         // 如果视频不存在
@@ -106,8 +106,8 @@ public class VideoController {
     /**
      * 跳转到审核页面
      */
-    @GetMapping(path = "/audit/{id}")
-    public ResponseEntity<?> audit(@PathVariable Integer id) {
+    @GetMapping(path = "/audit")
+    public ResponseEntity<?> audit(@RequestParam Integer id) {
         Video video = this.videoService.queryOne(id, FetchType.EAGER);
         // 如果视频不存在
         if (video == null) {
@@ -151,9 +151,9 @@ public class VideoController {
     /**
      * 处理删除
      */
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping(path = "/delete")
     public ResponseEntity<?> delete(
-            @PathVariable Integer id,
+            @RequestParam Integer id,
             @SessionAttribute(Constants.SESSION_USER_KEY) User user) {
         Video video = this.videoService.queryOne(id, FetchType.LAZY);
         // 如果视频不存在
@@ -226,8 +226,8 @@ public class VideoController {
     /**
      * 跳转到编辑页面
      */
-    @GetMapping(path = "/edit/{id}")
-    public ResponseEntity<?> edit(@PathVariable Integer id) {
+    @GetMapping(path = "/edit")
+    public ResponseEntity<?> edit(@RequestParam Integer id) {
         Video video = this.videoService.queryOne(id, FetchType.LAZY);
         // 如果视频不存在
         if (video == null) {

@@ -1,7 +1,6 @@
 package io.online.videosite.controller;
 
 import io.online.videosite.api.UserService;
-import io.online.videosite.constant.Constants;
 import io.online.videosite.domain.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
@@ -9,6 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +30,7 @@ import java.util.regex.Pattern;
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
     // 匹配非大小写字母、数字、下划线
     private final Pattern pattern = Pattern.compile("\\W");
 
@@ -46,26 +50,21 @@ public class UserController {
                     .contentType(MediaType.APPLICATION_JSON)
                     .body("请输入密码！");
         }
-        User entity = this.userService.query(user);
-        if (entity == null) {
-            log.info("login(): 此用户 {} 不存在！", user.getUsername());
+        Authentication authentication = this.authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken.unauthenticated(
+                        user.getUsername(), user.getPassword()));
+        if (!authentication.isAuthenticated()) {
+            log.info("login(): 此用户 {} 不存在或密码不正确！", user.getUsername());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .contentType(MediaType.APPLICATION_JSON)
                     .body("用户名或密码不正确！");
         }
-        // 验证密码
-        boolean matches = this.passwordEncoder.matches(user.getPassword(), entity.getPassword());
-        if (!matches) {
-            log.info("login(): 此用户 {} 密码不正确！", user.getUsername());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body("用户名或密码不正确！");
-        }
-        entity.setPassword(null);// 清除密码
-        session.setAttribute(Constants.SESSION_USER_KEY, entity);// 在会话中保存登录用户
+        System.err.println(SecurityContextHolder.getContext().getAuthentication());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        System.err.println(SecurityContextHolder.getContext().getAuthentication());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(entity);
+                .body(authentication.getPrincipal());
     }
 
     /**
