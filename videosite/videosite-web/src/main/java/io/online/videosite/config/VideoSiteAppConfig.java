@@ -77,12 +77,19 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
                         .requestMatchers(appProps.getAdminPathPatterns()).hasRole("ADMIN")
                         // 任何请求任何人都能访问
                         .anyRequest().permitAll())
+                // 禁用CORS
                 .cors(AbstractHttpConfigurer::disable)
+                // 禁用CSRF
                 .csrf(AbstractHttpConfigurer::disable)
+                // 禁用匿名身份
                 .anonymous(AbstractHttpConfigurer::disable)
+                // 禁用响应头
                 .headers(AbstractHttpConfigurer::disable)
+                // 启用登出功能
                 .logout(logout -> logout.logoutUrl("/user/logout"))
+                // 禁用请求缓存
                 .requestCache(AbstractHttpConfigurer::disable)
+                // 添加过滤器
                 .addFilterAfter(jsonLoginAuthenticationFilter, SecurityContextHolderFilter.class)
         ;
         return http.build();
