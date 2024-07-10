@@ -1,9 +1,9 @@
 package io.online.videosite.controller;
 
+import io.online.videosite.annotation.CurrentUser;
 import io.online.videosite.api.CommentService;
 import io.online.videosite.api.VideoService;
 import io.online.videosite.constant.AuditStatus;
-import io.online.videosite.constant.Constants;
 import io.online.videosite.domain.Comment;
 import io.online.videosite.domain.User;
 import io.online.videosite.domain.Video;
@@ -50,7 +50,7 @@ public class VideoController {
      * 跳转到用户的视频列表页
      */
     @GetMapping(path = "/list")
-    public ResponseEntity<?> list(@SessionAttribute(Constants.SESSION_USER_KEY) User user) {
+    public ResponseEntity<?> list(@CurrentUser User user) {
         // 查询此用户所有的视频
         List<Video> videos = this.videoService.queryForUser(user);
         log.info("list(): 视频数量 = {}", videos.size());
@@ -91,7 +91,7 @@ public class VideoController {
     @PutMapping(path = "/addhits")
     public Object addHits(
             @RequestParam Integer id,
-            @SessionAttribute(name = Constants.SESSION_USER_KEY, required = false) User user) {
+            @CurrentUser User user) {
         Video video = this.videoService.queryOne(id, FetchType.LAZY);
         // 如果视频不存在
         if (video == null) {
@@ -122,7 +122,7 @@ public class VideoController {
     @PutMapping(path = "/audit")
     public ResponseEntity<?> handleAudit(
             @RequestBody Video param,
-            @SessionAttribute(Constants.SESSION_USER_KEY) User user) {
+            @CurrentUser User user) {
         if (param.getId() == null) {
             return ResponseEntity.badRequest()
                     .contentType(MediaType.APPLICATION_JSON)
@@ -154,7 +154,7 @@ public class VideoController {
     @DeleteMapping(path = "/delete")
     public ResponseEntity<?> delete(
             @RequestParam Integer id,
-            @SessionAttribute(Constants.SESSION_USER_KEY) User user) {
+            @CurrentUser User user) {
         Video video = this.videoService.queryOne(id, FetchType.LAZY);
         // 如果视频不存在
         if (video == null) {
@@ -174,7 +174,7 @@ public class VideoController {
     @PostMapping(path = "/add")
     public ResponseEntity<?> handleAdd(
             @ModelAttribute VideoModel model,
-            @SessionAttribute(Constants.SESSION_USER_KEY) User user) throws Exception {
+            @CurrentUser User user) throws Exception {
         if (!StringUtils.hasText(model.getVideoName())) {
             return ResponseEntity.badRequest()
                     .contentType(MediaType.APPLICATION_JSON)
@@ -241,7 +241,7 @@ public class VideoController {
      */
     @PutMapping(path = "/edit")
     public ResponseEntity<?> handleEdit(
-            @SessionAttribute(Constants.SESSION_USER_KEY) User user,
+            @CurrentUser User user,
             @ModelAttribute VideoModel model) throws Exception {
         if (model.getId() == null) {
             return ResponseEntity.badRequest()

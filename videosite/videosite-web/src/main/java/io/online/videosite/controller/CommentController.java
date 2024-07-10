@@ -1,8 +1,8 @@
 package io.online.videosite.controller;
 
+import io.online.videosite.annotation.CurrentUser;
 import io.online.videosite.api.CommentService;
 import io.online.videosite.api.VideoService;
-import io.online.videosite.constant.Constants;
 import io.online.videosite.domain.Comment;
 import io.online.videosite.domain.User;
 import io.online.videosite.domain.Video;
@@ -32,7 +32,7 @@ public class CommentController {
     @PostMapping(path = "/add")
     public ResponseEntity<?> add(
             @RequestBody Comment comment,
-            @SessionAttribute(Constants.SESSION_USER_KEY) User user) {
+            @CurrentUser User user) {
         if (comment.getVideoId() == null) {
             return ResponseEntity.badRequest()
                     .contentType(MediaType.APPLICATION_JSON)

@@ -1,7 +1,7 @@
 package io.online.videosite.controller;
 
+import io.online.videosite.annotation.CurrentUser;
 import io.online.videosite.api.CategoryService;
-import io.online.videosite.constant.Constants;
 import io.online.videosite.domain.Category;
 import io.online.videosite.domain.User;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ public class CategoryController {
     @PostMapping(path = "/add")
     public ResponseEntity<?> handleAdd(
             @RequestBody Category category,
-            @SessionAttribute(Constants.SESSION_USER_KEY) User user) {
+            @CurrentUser User user) {
         if (!StringUtils.hasText(category.getCategoryName())) {
             return ResponseEntity.badRequest()
                     .contentType(MediaType.APPLICATION_JSON)

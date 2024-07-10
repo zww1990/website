@@ -1,9 +1,9 @@
 package io.online.videosite.controller;
 
+import io.online.videosite.annotation.CurrentUser;
 import io.online.videosite.api.CategoryService;
 import io.online.videosite.api.VideoService;
 import io.online.videosite.constant.AuditStatus;
-import io.online.videosite.constant.Constants;
 import io.online.videosite.domain.Category;
 import io.online.videosite.domain.User;
 import io.online.videosite.domain.Video;
@@ -37,7 +37,7 @@ public class IndexController {
      */
     @GetMapping(path = "/home")
     public ResponseEntity<?> home(
-            @SessionAttribute(name = Constants.SESSION_USER_KEY, required = false) User user,
+            @CurrentUser User user,
             @RequestParam(required = false) Integer categoryId) {
         // 查询所有用户审核通过的视频
         List<Video> videos = this.videoService.query(categoryId, AuditStatus.PASSED);
