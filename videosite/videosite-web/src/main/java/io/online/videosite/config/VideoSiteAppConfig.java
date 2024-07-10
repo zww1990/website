@@ -111,6 +111,7 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
         filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
         filter.setFilterProcessesUrl("/user/login");
         filter.setAuthenticationFailureHandler(new JsonAuthenticationFailureHandler(objectMapper));
+        filter.setAuthenticationSuccessHandler(new JsonAuthenticationSuccessHandler(objectMapper));
         return filter;
     }
 }
