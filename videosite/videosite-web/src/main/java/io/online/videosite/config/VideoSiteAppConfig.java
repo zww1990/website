@@ -72,6 +72,7 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
             HttpSecurity http,
             JsonLoginAuthenticationFilter jsonLoginAuthenticationFilter,
             JsonAuthenticationEntryPoint jsonAuthenticationEntryPoint,
+            JsonLogoutSuccessHandler jsonLogoutSuccessHandler,
             VideoSiteAppProperties appProps) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(appProps.getIncludePathPatterns()).authenticated()
@@ -89,7 +90,8 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
                 // 禁用请求缓存
                 .requestCache(AbstractHttpConfigurer::disable)
                 // 启用登出功能
-                .logout(logout -> logout.logoutUrl("/user/logout"))
+                .logout(logout -> logout.logoutUrl("/user/logout").logoutSuccessHandler(jsonLogoutSuccessHandler))
+                // 允许配置异常处理
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jsonAuthenticationEntryPoint))
                 // 添加过滤器
                 .addFilterAfter(jsonLoginAuthenticationFilter, SecurityContextHolderFilter.class)
@@ -120,5 +122,10 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
     @Bean
     public JsonAuthenticationEntryPoint jsonAuthenticationEntryPoint(ObjectMapper objectMapper) {
         return new JsonAuthenticationEntryPoint(objectMapper);
+    }
+
+    @Bean
+    public JsonLogoutSuccessHandler jsonLogoutSuccessHandler(ObjectMapper objectMapper) {
+        return new JsonLogoutSuccessHandler(objectMapper);
     }
 }
