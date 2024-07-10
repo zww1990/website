@@ -36,7 +36,6 @@ import org.springframework.web.util.UrlPathHelper;
 @AllArgsConstructor
 @Slf4j
 public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar {
-    private final VideoSiteAppProperties appProps;
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
@@ -71,10 +70,11 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            JsonLoginAuthenticationFilter jsonLoginAuthenticationFilter) throws Exception {
+            JsonLoginAuthenticationFilter jsonLoginAuthenticationFilter,
+            VideoSiteAppProperties appProps) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(this.appProps.getIncludePathPatterns()).authenticated()
-                        .requestMatchers(this.appProps.getAdminPathPatterns()).hasRole("ADMIN")
+                        .requestMatchers(appProps.getIncludePathPatterns()).authenticated()
+                        .requestMatchers(appProps.getAdminPathPatterns()).hasRole("ADMIN")
                         // 任何请求任何人都能访问
                         .anyRequest().permitAll())
                 .cors(AbstractHttpConfigurer::disable)
