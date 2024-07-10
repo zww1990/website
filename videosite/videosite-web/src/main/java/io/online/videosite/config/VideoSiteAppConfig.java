@@ -1,5 +1,6 @@
 package io.online.videosite.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.online.videosite.properties.VideoSiteAppProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,7 +20,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.*;
@@ -70,7 +70,8 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
 
     @Bean
     public SecurityFilterChain securityFilterChain(
-            HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
+            HttpSecurity http,
+            JsonLoginAuthenticationFilter jsonLoginAuthenticationFilter) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(this.appProps.getIncludePathPatterns()).authenticated()
                         .requestMatchers(this.appProps.getAdminPathPatterns()).hasRole("ADMIN")
@@ -78,22 +79,11 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
                         .anyRequest().permitAll())
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-//                .formLogin(Customizer.withDefaults())
-                .httpBasic(AbstractHttpConfigurer::disable)
                 .anonymous(AbstractHttpConfigurer::disable)
-//                .exceptionHandling(AbstractHttpConfigurer::disable)
                 .headers(AbstractHttpConfigurer::disable)
-                .jee(AbstractHttpConfigurer::disable)
-                .logout(AbstractHttpConfigurer::disable)
-                .passwordManagement(AbstractHttpConfigurer::disable)
-                .portMapper(AbstractHttpConfigurer::disable)
-                .rememberMe(AbstractHttpConfigurer::disable)
+                .logout(logout -> logout.logoutUrl("/user/logout"))
                 .requestCache(AbstractHttpConfigurer::disable)
-//                .securityContext(AbstractHttpConfigurer::disable)
-//                .servletApi(AbstractHttpConfigurer::disable)
-//                .sessionManagement(AbstractHttpConfigurer::disable)
-                .x509(AbstractHttpConfigurer::disable)
-                .addFilterAfter(new UsernamePasswordAuthenticationFilter(authenticationManager), SecurityContextHolderFilter.class)
+                .addFilterAfter(jsonLoginAuthenticationFilter, SecurityContextHolderFilter.class)
         ;
         return http.build();
     }
@@ -104,5 +94,15 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
         authenticationProvider.setUserDetailsService(userDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(authenticationProvider);
+    }
+
+    @Bean
+    public JsonLoginAuthenticationFilter jsonLoginAuthenticationFilter(
+            ObjectMapper objectMapper, AuthenticationManager authenticationManager) {
+        JsonLoginAuthenticationFilter filter = new JsonLoginAuthenticationFilter(objectMapper);
+        filter.setAuthenticationManager(authenticationManager);
+        filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
+        filter.setFilterProcessesUrl("/user/login");
+        return filter;
     }
 }
