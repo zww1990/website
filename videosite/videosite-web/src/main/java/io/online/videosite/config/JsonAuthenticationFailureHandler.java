@@ -36,7 +36,7 @@ public class JsonAuthenticationFailureHandler implements AuthenticationFailureHa
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         try (PrintWriter out = response.getWriter()) {
-            out.write(this.objectMapper.writeValueAsString("用户名或密码不正确！"));
+            out.write(this.objectMapper.writeValueAsString(exception.getLocalizedMessage()));
         }
     }
 }
