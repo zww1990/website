@@ -73,9 +73,10 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
             JsonLoginAuthenticationFilter jsonLoginAuthenticationFilter,
             JsonAuthenticationEntryPoint jsonAuthenticationEntryPoint,
             JsonLogoutSuccessHandler jsonLogoutSuccessHandler,
+            JsonAccessDeniedHandler jsonAccessDeniedHandler,
             VideoSiteAppProperties appProps) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(appProps.getIncludePathPatterns()).authenticated()
+                        .requestMatchers(appProps.getIncludePathPatterns()).hasRole("USER")
                         .requestMatchers(appProps.getAdminPathPatterns()).hasRole("ADMIN")
                         // 任何请求任何人都能访问
                         .anyRequest().permitAll())
@@ -92,7 +93,8 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
                 // 启用登出功能
                 .logout(logout -> logout.logoutUrl("/user/logout").logoutSuccessHandler(jsonLogoutSuccessHandler))
                 // 允许配置异常处理
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jsonAuthenticationEntryPoint))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(jsonAuthenticationEntryPoint)
+                        .accessDeniedHandler(jsonAccessDeniedHandler))
                 // 添加过滤器
                 .addFilterAfter(jsonLoginAuthenticationFilter, SecurityContextHolderFilter.class)
         ;
@@ -127,5 +129,10 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
     @Bean
     public JsonLogoutSuccessHandler jsonLogoutSuccessHandler(ObjectMapper objectMapper) {
         return new JsonLogoutSuccessHandler(objectMapper);
+    }
+
+    @Bean
+    public JsonAccessDeniedHandler jsonAccessDeniedHandler(ObjectMapper objectMapper) {
+        return new JsonAccessDeniedHandler(objectMapper);
     }
 }
