@@ -1,6 +1,6 @@
 package io.online.videosite.controller;
 
-import io.online.videosite.annotation.CurrentUser;
+import io.online.videosite.security.CurrentUser;
 import io.online.videosite.api.CategoryService;
 import io.online.videosite.domain.Category;
 import io.online.videosite.domain.User;

@@ -2,6 +2,7 @@ package io.online.videosite.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.online.videosite.properties.VideoSiteAppProperties;
+import io.online.videosite.security.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.server.ErrorPage;

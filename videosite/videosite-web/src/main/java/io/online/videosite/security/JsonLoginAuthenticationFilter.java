@@ -1,4 +1,4 @@
-package io.online.videosite.config;
+package io.online.videosite.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

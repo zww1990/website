@@ -1,4 +1,4 @@
-package io.online.videosite.annotation;
+package io.online.videosite.security;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 

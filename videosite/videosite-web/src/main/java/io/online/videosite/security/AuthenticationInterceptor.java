@@ -1,4 +1,4 @@
-package io.online.videosite.config;
+package io.online.videosite.security;
 
 import io.online.videosite.constant.Constants;
 import io.online.videosite.constant.UserType;
