@@ -51,7 +51,7 @@ public class User extends BaseEntity implements UserDetails, CredentialsContaine
     /**
      * 权限集合
      */
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "t_user_authority",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "auth_id", referencedColumnName = "id"))

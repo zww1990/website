@@ -1,6 +1,7 @@
 package io.online.videosite;
 
 import io.online.videosite.constant.AuditStatus;
+import io.online.videosite.domain.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -38,6 +39,20 @@ public class SimpleTests {
         try {
             AuditStatus status = null;
             System.err.println(status == AuditStatus.PENDING);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testUser() {
+        try {
+            User user = new User();
+            user.setAccountNonExpired(true);
+            user.setAccountNonLocked(true);
+            user.setCredentialsNonExpired(true);
+            user.setEnabled(true);
+            System.err.println(user);
         } catch (Exception e) {
             e.printStackTrace();
         }

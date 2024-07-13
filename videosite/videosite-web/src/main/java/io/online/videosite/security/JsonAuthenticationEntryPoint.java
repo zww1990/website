@@ -36,7 +36,7 @@ public class JsonAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.FORBIDDEN.value());
         try (PrintWriter out = response.getWriter()) {
-            out.write(this.objectMapper.writeValueAsString("禁止访问，请求被拒绝！"));
+            out.write(this.objectMapper.writeValueAsString("会话已失效，请重新登录！"));
         }
     }
 }

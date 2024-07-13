@@ -14,7 +14,7 @@ public class RoleHierarchyTests {
     public void testGetReachableGrantedAuthorities() {
         try {
             System.err.println(RoleHierarchyImpl
-                    .fromHierarchy("ROLE_ADMIN > ROLE_USER")
+                    .fromHierarchy("ROLE_ADMIN > ROLE_NORMAL")
                     .getReachableGrantedAuthorities(AuthorityUtils.NO_AUTHORITIES));
         } catch (Exception e) {
             e.printStackTrace();
@@ -25,7 +25,7 @@ public class RoleHierarchyTests {
     public void testRoleHierarchyFromMap() {
         try {
             Map<String, List<String>> map = new HashMap<>();
-            map.put("ROLE_ADMIN", List.of("ROLE_USER"));
+            map.put("ROLE_ADMIN", List.of("ROLE_NORMAL"));
             System.err.println(RoleHierarchyUtils.roleHierarchyFromMap(map));
         } catch (Exception e) {
             e.printStackTrace();

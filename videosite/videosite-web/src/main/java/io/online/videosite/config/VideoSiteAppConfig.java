@@ -79,8 +79,8 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
             JsonAccessDeniedHandler jsonAccessDeniedHandler,
             VideoSiteAppProperties appProps) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(appProps.getIncludePathPatterns()).hasRole("USER")
-                        .requestMatchers(appProps.getAdminPathPatterns()).hasRole("ADMIN")
+                        .requestMatchers(appProps.getIncludePathPatterns()).hasAuthority("ROLE_NORMAL")
+                        .requestMatchers(appProps.getAdminPathPatterns()).hasAuthority("ROLE_ADMIN")
                         // 任何请求任何人都能访问
                         .anyRequest().permitAll())
                 // 禁用CORS
@@ -139,8 +139,11 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
         return new JsonAccessDeniedHandler(objectMapper);
     }
 
-//    @Bean
-//    public RoleHierarchy roleHierarchy() {
-//        return RoleHierarchyImpl.fromHierarchy("ROLE_ADMIN > ROLE_USER");
-//    }
+    /**
+     * 注册角色继承
+     */
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        return RoleHierarchyImpl.fromHierarchy("ROLE_ADMIN > ROLE_NORMAL");
+    }
 }
