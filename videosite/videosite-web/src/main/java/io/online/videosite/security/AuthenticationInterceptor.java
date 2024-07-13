@@ -48,7 +48,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return matches;
         });
         // 如果需要管理员身份，但当前用户不是管理员
-        if (result && user.getUserType() != UserType.ADMIN) {
+        if (result && user.getUserType() != UserType.ROLE_ADMIN) {
             log.info("preHandle(): 用户未授权！");
             throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
         }

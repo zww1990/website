@@ -3,10 +3,7 @@ package io.online.videosite.service;
 import io.online.videosite.api.VideoService;
 import io.online.videosite.constant.AuditStatus;
 import io.online.videosite.constant.UserType;
-import io.online.videosite.domain.Category;
-import io.online.videosite.domain.User;
-import io.online.videosite.domain.Video;
-import io.online.videosite.domain.VideoHistory;
+import io.online.videosite.domain.*;
 import io.online.videosite.model.VideoModel;
 import io.online.videosite.properties.VideoSiteAppProperties;
 import io.online.videosite.repository.*;
@@ -81,7 +78,10 @@ public class VideoServiceImpl implements VideoService {
         log.info("queryForUser(): user = {}", user);
         return this.videoRepository.findAll((root, query, builder) -> {
             // 如果是管理员，查询所有视频
-            if (user.getUserType() == UserType.ADMIN) {
+            if (user.getAuthorities()
+                    .stream()
+                    .map(Authority::getAuthority)
+                    .anyMatch(p -> UserType.valueOf(p) == UserType.ROLE_ADMIN)) {
                 return query.getRestriction();
             }
             return builder.equal(root.get("creator"), user.getUsername());
@@ -198,7 +198,10 @@ public class VideoServiceImpl implements VideoService {
         video.setVideoLink(model.getVideoLinkPath());
         video.setCreator(user.getUsername());
         video.setModifier(user.getUsername());
-        if (user.getUserType() == UserType.ADMIN) {
+        if (user.getAuthorities()
+                .stream()
+                .map(Authority::getAuthority)
+                .anyMatch(p -> UserType.valueOf(p) == UserType.ROLE_ADMIN)) {
             // 如果是管理员用户添加视频，直接审核通过
             video.setAuditStatus(AuditStatus.PASSED);
             video.setAuditedDate(LocalDateTime.now());
@@ -259,7 +262,10 @@ public class VideoServiceImpl implements VideoService {
         video.setCategoryId(model.getCategoryId());
         video.setVideoHits(0);
         video.setModifier(user.getUsername());
-        if (user.getUserType() == UserType.ADMIN) {
+        if (user.getAuthorities()
+                .stream()
+                .map(Authority::getAuthority)
+                .anyMatch(p -> UserType.valueOf(p) == UserType.ROLE_ADMIN)) {
             // 如果是管理员用户添加视频，直接审核通过
             video.setAuditStatus(AuditStatus.PASSED);
             video.setAuditedDate(LocalDateTime.now());

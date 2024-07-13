@@ -1,5 +1,6 @@
 package io.online.videosite.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.online.videosite.constant.UserType;
 import jakarta.persistence.*;
@@ -46,12 +47,15 @@ public class User extends BaseEntity implements UserDetails, CredentialsContaine
     /**
      * 用户类型
      */
-    @Enumerated(EnumType.STRING)
+    @Transient
+    @ToString.Exclude
+    @JsonIgnore
+    @Deprecated
     private UserType userType;
     /**
      * 权限集合
      */
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "t_user_authority",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "auth_id", referencedColumnName = "id"))

@@ -1,17 +1,24 @@
 package io.online.videosite.constant;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * 用户类型枚举类
  *
  * @author 张维维
  */
+@AllArgsConstructor
+@Getter
 public enum UserType {
     /**
      * 系统管理员
      */
-    ADMIN,
+    ROLE_ADMIN("系统管理员"),
     /**
      * 普通用户
      */
-    NORMAL,
+    ROLE_NORMAL("普通用户");
+
+    private final String userTypeName;
 }

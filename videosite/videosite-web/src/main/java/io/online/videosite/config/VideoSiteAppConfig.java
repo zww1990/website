@@ -1,6 +1,7 @@
 package io.online.videosite.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.online.videosite.constant.UserType;
 import io.online.videosite.properties.VideoSiteAppProperties;
 import io.online.videosite.security.*;
 import lombok.AllArgsConstructor;
@@ -79,8 +80,10 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
             JsonAccessDeniedHandler jsonAccessDeniedHandler,
             VideoSiteAppProperties appProps) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(appProps.getIncludePathPatterns()).hasAuthority("ROLE_NORMAL")
-                        .requestMatchers(appProps.getAdminPathPatterns()).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(appProps.getIncludePathPatterns())
+                            .hasAuthority(UserType.ROLE_NORMAL.name())
+                        .requestMatchers(appProps.getAdminPathPatterns())
+                            .hasAuthority(UserType.ROLE_ADMIN.name())
                         // 任何请求任何人都能访问
                         .anyRequest().permitAll())
                 // 禁用CORS
@@ -94,9 +97,12 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
                 // 禁用请求缓存
                 .requestCache(AbstractHttpConfigurer::disable)
                 // 启用登出功能
-                .logout(logout -> logout.logoutUrl("/user/logout").logoutSuccessHandler(jsonLogoutSuccessHandler))
+                .logout(logout -> logout
+                        .logoutUrl("/user/logout")
+                        .logoutSuccessHandler(jsonLogoutSuccessHandler))
                 // 允许配置异常处理
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jsonAuthenticationEntryPoint)
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(jsonAuthenticationEntryPoint)
                         .accessDeniedHandler(jsonAccessDeniedHandler))
                 // 添加过滤器
                 .addFilterAfter(jsonLoginAuthenticationFilter, SecurityContextHolderFilter.class)
@@ -144,6 +150,7 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
      */
     @Bean
     public RoleHierarchy roleHierarchy() {
-        return RoleHierarchyImpl.fromHierarchy("ROLE_ADMIN > ROLE_NORMAL");
+        return RoleHierarchyImpl.fromHierarchy(
+                String.format("%s > %s", UserType.ROLE_ADMIN.name(), UserType.ROLE_NORMAL.name()));
     }
 }

@@ -15,7 +15,7 @@ create table if not exists t_user (
     username                varchar(64)  not null       unique                        comment '用户名',
     nickname                varchar(64)  not null                                     comment '昵称',
     password                varchar(256) not null                                     comment '密码',
-    user_type               varchar(32)  not null                                     comment '用户类型',
+    user_type               varchar(32)  null                                         comment '用户类型',
     created_date            datetime     not null       default now()                 comment '创建时间',
     creator                 varchar(64)  not null                                     comment '创建人',
     modified_date           datetime     not null       default now() on update now() comment '修改时间',
@@ -97,8 +97,8 @@ create table if not exists t_comment (
 ) comment '视频评论表';
 
 -- 初始化数据
-insert into t_user (username, nickname, password, user_type, creator, modifier)
-values ('admin', '管理员', '{bcrypt}$2a$10$GG/O6kejMQvT/nVQAzCduuUqukadG/nSLZOUIyuNLRm./FwvqEiQC', 'ADMIN', 'admin', 'admin');
+insert into t_user (username, nickname, password, creator, modifier)
+values ('admin', '管理员', '{bcrypt}$2a$10$GG/O6kejMQvT/nVQAzCduuUqukadG/nSLZOUIyuNLRm./FwvqEiQC', 'admin', 'admin');
 insert into t_authority (auth_name, authority, creator, modifier)
 values ('系统管理员', 'ROLE_ADMIN', 'admin', 'admin'), ('普通用户', 'ROLE_NORMAL', 'admin', 'admin');
 insert into t_user_authority (user_id, auth_id)
