@@ -11,6 +11,8 @@ import org.springframework.boot.web.server.ErrorPageRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -136,4 +138,9 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
     public JsonAccessDeniedHandler jsonAccessDeniedHandler(ObjectMapper objectMapper) {
         return new JsonAccessDeniedHandler(objectMapper);
     }
+
+//    @Bean
+//    public RoleHierarchy roleHierarchy() {
+//        return RoleHierarchyImpl.fromHierarchy("ROLE_ADMIN > ROLE_USER");
+//    }
 }
