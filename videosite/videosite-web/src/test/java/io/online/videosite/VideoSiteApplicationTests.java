@@ -3,6 +3,7 @@ package io.online.videosite;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.Filter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @SpringBootTest
 public class VideoSiteApplicationTests {
@@ -22,7 +24,9 @@ public class VideoSiteApplicationTests {
 
     @Test
     public void testContextLoads() throws Exception {
-        System.err.println(this.applicationContext.getBeansOfType(UserDetailsService.class));
+        this.applicationContext.getBeansOfType(Filter.class).forEach((k, v) -> System.err.println(k + " = " + v));
+//        System.err.println(this.applicationContext.getBeansOfType(CorsConfigurationSource.class));
+//        System.err.println(this.applicationContext.getBeansOfType(UserDetailsService.class));
 //        ObjectWriter json = applicationContext.getBean(ObjectMapper.class).writerWithDefaultPrettyPrinter();
 //        System.err.println(json.writeValueAsString(ResponseEntity.ok("hello world")));
 //        System.err.println(json.writeValueAsString(ResponseEntity.internalServerError().body("what the fuck")));

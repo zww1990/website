@@ -11,6 +11,7 @@ import org.springframework.boot.web.server.ErrorPageRegistrar;
 import org.springframework.boot.web.server.ErrorPageRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
@@ -24,11 +25,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.*;
-import org.springframework.web.util.UrlPathHelper;
+
+import java.util.List;
 
 /**
  * 自定义Spring MVC配置类
@@ -40,23 +44,6 @@ import org.springframework.web.util.UrlPathHelper;
 @AllArgsConstructor
 @Slf4j
 public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar {
-
-    @Override
-    public void configurePathMatch(PathMatchConfigurer configurer) {
-        UrlPathHelper urlPathHelper = new UrlPathHelper();
-        urlPathHelper.setRemoveSemicolonContent(false);
-        configurer.setUrlPathHelper(urlPathHelper);
-    }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowCredentials(true)
-                .allowedHeaders(CorsConfiguration.ALL)
-                .allowedMethods(CorsConfiguration.ALL)
-                .allowedOriginPatterns(CorsConfiguration.ALL)
-                .exposedHeaders(CorsConfiguration.ALL);
-    }
 
     /**
      * 注册密码编码器
@@ -86,8 +73,8 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
                             .hasAuthority(UserType.ROLE_ADMIN.name())
                         // 任何请求任何人都能访问
                         .anyRequest().permitAll())
-                // 禁用CORS
-                .cors(AbstractHttpConfigurer::disable)
+                // 启用CORS
+                .cors(cors -> cors.configurationSource(this.corsConfigurationSource()))
                 // 禁用CSRF
                 .csrf(AbstractHttpConfigurer::disable)
                 // 禁用匿名身份
@@ -105,9 +92,26 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
                         .authenticationEntryPoint(jsonAuthenticationEntryPoint)
                         .accessDeniedHandler(jsonAccessDeniedHandler))
                 // 添加过滤器
-                .addFilterAfter(jsonLoginAuthenticationFilter, SecurityContextHolderFilter.class)
+                .addFilterAfter(jsonLoginAuthenticationFilter, LogoutFilter.class)
         ;
         return http.build();
+    }
+
+    /**
+     * 跨域资源共享
+     */
+    @Bean
+    @Primary
+    public CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(List.of(CorsConfiguration.ALL));
+        config.setAllowedHeaders(List.of(CorsConfiguration.ALL));
+        config.setAllowedMethods(List.of(CorsConfiguration.ALL));
+        config.setExposedHeaders(List.of(CorsConfiguration.ALL));
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     @Bean
