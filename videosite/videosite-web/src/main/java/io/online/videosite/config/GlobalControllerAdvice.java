@@ -18,22 +18,27 @@ import org.springframework.web.client.HttpClientErrorException;
 @RestControllerAdvice(annotations = RestController.class)
 @Slf4j
 public class GlobalControllerAdvice {
-    /**
-     * 跳转到404页面
-     */
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<?> handleEntityNotFoundException(EntityNotFoundException ex) {
+        log.error(ex.getLocalizedMessage(), ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(ex.getLocalizedMessage());
     }
 
-    /**
-     * 跳转到 error/xxx 页面
-     */
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<?> handleHttpClientErrorException(HttpClientErrorException ex) {
+        log.error(ex.getLocalizedMessage(), ex);
         return ResponseEntity.status(ex.getStatusCode())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ex.getLocalizedMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(Exception ex) {
+        log.error(ex.getLocalizedMessage(), ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(ex.getLocalizedMessage());
     }
