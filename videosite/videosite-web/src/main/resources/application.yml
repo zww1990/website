@@ -5,6 +5,8 @@ server:
   servlet:
     jsp:
       registered: false
+  compression:
+    enabled: true
 
 spring:
   application:
