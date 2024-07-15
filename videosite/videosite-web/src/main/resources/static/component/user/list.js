@@ -3,6 +3,10 @@ import { userListApi } from '../utils/axiosapi.js'
 export default {
   async setup() {
     const dataSource = await userListApi()
+    dataSource.forEach(it => {
+        let authNames = it.authorities.map(jt => jt.authName)
+        Object.assign(it, { userType: authNames.join(',') })
+    })
     const columns = [
       { title: '主键', dataIndex: 'id', },
       { title: '用户名', dataIndex: 'username', },
