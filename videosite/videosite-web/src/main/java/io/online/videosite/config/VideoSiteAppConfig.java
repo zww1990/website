@@ -67,10 +67,8 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
             JsonAccessDeniedHandler jsonAccessDeniedHandler,
             VideoSiteAppProperties appProps) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(appProps.getIncludePathPatterns())
-                            .hasAuthority(UserType.ROLE_NORMAL.name())
-                        .requestMatchers(appProps.getAdminPathPatterns())
-                            .hasAuthority(UserType.ROLE_ADMIN.name())
+                        .requestMatchers(appProps.getIncludePathPatterns()).hasAuthority(UserType.ROLE_NORMAL.name())
+                        .requestMatchers(appProps.getAdminPathPatterns()).hasAuthority(UserType.ROLE_ADMIN.name())
                         // 任何请求任何人都能访问
                         .anyRequest().permitAll())
                 // 启用CORS
