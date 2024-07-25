@@ -6,7 +6,6 @@ import com.nimbusds.jose.crypto.MACVerifier;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class JwtTests {
     //使用uuid生成密钥
