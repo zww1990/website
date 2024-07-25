@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class JwtTests {
     //使用uuid生成密钥
-    private final String secret = UUID.randomUUID().toString();
+    private final String secret = "UUIDrandomUUIDtoString1234567890";
 
     /**
      * 创建jwt令牌
