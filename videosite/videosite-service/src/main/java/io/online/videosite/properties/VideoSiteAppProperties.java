@@ -45,4 +45,18 @@ public class VideoSiteAppProperties {
      * 视频上传目录
      */
     private String videoUploadFolder = "/upload/videos";
+    /**
+     * JWT配置
+     */
+    private JwtProperties jwt;
+
+    @Getter
+    @Setter
+    public static class JwtProperties {
+        private String secret = "hellovideosite1234hellovideosite";
+        /**
+         * 单位秒
+         */
+        private Long expiration = 3600L;
+    }
 }

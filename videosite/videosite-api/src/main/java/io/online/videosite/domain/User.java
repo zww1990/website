@@ -76,6 +76,12 @@ public class User extends BaseEntity implements UserDetails, CredentialsContaine
      * 帐户是否已启用
      */
     private boolean enabled;
+    /**
+     * JWT口令
+     */
+    @Transient
+    @ToString.Exclude
+    private String token;
 
     @Override
     public void eraseCredentials() {
