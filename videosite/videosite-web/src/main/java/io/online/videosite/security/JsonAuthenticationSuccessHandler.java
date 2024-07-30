@@ -35,6 +35,8 @@ public class JsonAuthenticationSuccessHandler implements AuthenticationSuccessHa
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         try (PrintWriter out = response.getWriter()) {
             User user = (User) authentication.getPrincipal();
+            // TODO 生成JWT
+            user.setToken("");
             log.info("onAuthenticationSuccess(): user = {}", user);
             out.write(this.objectMapper.writeValueAsString(user));
         }
