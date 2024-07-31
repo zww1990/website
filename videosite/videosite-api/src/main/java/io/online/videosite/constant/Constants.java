@@ -10,6 +10,10 @@ public interface Constants {
      * 会话中当前登录用户的键
      */
     String SESSION_USER_KEY = "CURRENT_USER";
+    /**
+     * JWT中用户的键
+     */
+    String JWT_USER_KEY = "USER_ID";
     String JSONFORMAT_DATETIME = "yyyy-MM-dd HH:mm:ss";
     String JSONFORMAT_TIMEZONE = "GMT+8";
 }

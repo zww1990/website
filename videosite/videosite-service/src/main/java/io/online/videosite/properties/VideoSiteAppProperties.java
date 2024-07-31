@@ -48,14 +48,25 @@ public class VideoSiteAppProperties {
     /**
      * JWT配置
      */
-    private JwtProperties jwt;
+    private JwtProperties jwt = new JwtProperties();
 
     @Getter
     @Setter
     public static class JwtProperties {
+        /**
+         * 密钥，最少32个字符
+         */
         private String secret = "hellovideosite1234hellovideosite";
         /**
-         * 单位秒
+         * 主题
+         */
+        private String subject = "UserLogin";
+        /**
+         * 发布者
+         */
+        private String issuer = "SpringSecurity";
+        /**
+         * 失效时间，单位秒
          */
         private Long expiration = 3600L;
     }

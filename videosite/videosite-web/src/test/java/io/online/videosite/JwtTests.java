@@ -58,7 +58,7 @@ public class JwtTests {
                 .issuer("zhangweiwei")//
                 .issueTime(new Date())//
                 .expirationTime(new Date(System.currentTimeMillis() + 2 * 60 * 1000))//
-                .jwtID(UUID.randomUUID().toString())//
+                .jwtID(UUID.randomUUID().toString().replace("-", ""))//
                 .claim("username", "zhangweiwei")//
                 .build();
 

@@ -25,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 @AllArgsConstructor
 public class JsonAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final ObjectMapper objectMapper;
+    private final JwtHelper jwtHelper;
 
     @Override
     public void onAuthenticationSuccess(
@@ -33,11 +34,11 @@ public class JsonAuthenticationSuccessHandler implements AuthenticationSuccessHa
             Authentication authentication) throws IOException, ServletException {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        User user = (User) authentication.getPrincipal();
+        // 生成JWT令牌
+        user.setToken(this.jwtHelper.createJwtToken(user));
+        log.info("onAuthenticationSuccess(): user = {}", user);
         try (PrintWriter out = response.getWriter()) {
-            User user = (User) authentication.getPrincipal();
-            // TODO 生成JWT
-            user.setToken("");
-            log.info("onAuthenticationSuccess(): user = {}", user);
             out.write(this.objectMapper.writeValueAsString(user));
         }
     }
