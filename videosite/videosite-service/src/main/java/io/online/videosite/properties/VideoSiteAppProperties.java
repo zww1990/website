@@ -58,13 +58,13 @@ public class VideoSiteAppProperties {
          */
         private String secret = "hellovideosite1234hellovideosite";
         /**
-         * 主题
-         */
-        private String subject = "UserLogin";
-        /**
          * 发布者
          */
         private String issuer = "SpringSecurity";
+        /**
+         * 令牌前缀
+         */
+        private String tokenPrefix = "Bearer ";
         /**
          * 失效时间，单位秒
          */

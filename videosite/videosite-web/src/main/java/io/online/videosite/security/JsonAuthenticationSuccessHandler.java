@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * JSON登录身份验证成功处理程序
@@ -36,10 +37,14 @@ public class JsonAuthenticationSuccessHandler implements AuthenticationSuccessHa
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         User user = (User) authentication.getPrincipal();
         // 生成JWT令牌
-        user.setToken(this.jwtHelper.createJwtToken(user));
+        user.setToken(this.jwtHelper.createToken(user));
         log.info("onAuthenticationSuccess(): user = {}", user);
         try (PrintWriter out = response.getWriter()) {
-            out.write(this.objectMapper.writeValueAsString(user));
+            if (Objects.isNull(user.getToken())) {
+                out.write(this.objectMapper.writeValueAsString("用户名或密码错误！"));
+            } else {
+                out.write(this.objectMapper.writeValueAsString(user));
+            }
         }
     }
 }
