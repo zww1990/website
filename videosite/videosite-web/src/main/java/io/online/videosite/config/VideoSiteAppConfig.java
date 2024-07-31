@@ -21,6 +21,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,6 +62,7 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
+            JwtAuthenticationFilter jwtAuthenticationFilter,
             JsonLoginAuthenticationFilter jsonLoginAuthenticationFilter,
             JsonAuthenticationEntryPoint jsonAuthenticationEntryPoint,
             JsonLogoutSuccessHandler jsonLogoutSuccessHandler,
@@ -81,6 +83,8 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
                 .headers(AbstractHttpConfigurer::disable)
                 // 禁用请求缓存
                 .requestCache(AbstractHttpConfigurer::disable)
+                // 禁用session
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 启用登出功能
                 .logout(logout -> logout
                         .logoutUrl("/user/logout")
@@ -90,6 +94,7 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
                         .authenticationEntryPoint(jsonAuthenticationEntryPoint)
                         .accessDeniedHandler(jsonAccessDeniedHandler))
                 // 添加过滤器
+                .addFilterAfter(jwtAuthenticationFilter, LogoutFilter.class)
                 .addFilterAfter(jsonLoginAuthenticationFilter, LogoutFilter.class)
         ;
         return http.build();
@@ -120,6 +125,14 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
         // 是否隐藏用户不存在异常
         authenticationProvider.setHideUserNotFoundExceptions(false);
         return new ProviderManager(authenticationProvider);
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(
+            VideoSiteAppProperties properties,
+            JwtHelper jwtHelper,
+            UserDetailsService userDetailsService) {
+        return new JwtAuthenticationFilter(properties, jwtHelper, userDetailsService);
     }
 
     @Bean
