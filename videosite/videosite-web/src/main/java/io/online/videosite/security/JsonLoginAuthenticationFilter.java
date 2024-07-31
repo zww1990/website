@@ -11,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Map;
@@ -22,7 +21,6 @@ import java.util.Map;
  * @author 张维维
  * @since 2024-07-10 13:45:36
  */
-@Component
 @AllArgsConstructor
 @Slf4j
 public class JsonLoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
