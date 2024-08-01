@@ -62,10 +62,6 @@ public class VideoSiteAppProperties {
          */
         private String issuer = "SpringSecurity";
         /**
-         * 令牌前缀
-         */
-        private String tokenPrefix = "Bearer ";
-        /**
          * 失效时间，单位秒
          */
         private Long expiration = 3600L;

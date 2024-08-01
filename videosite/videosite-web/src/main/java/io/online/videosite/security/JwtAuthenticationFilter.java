@@ -1,7 +1,6 @@
 package io.online.videosite.security;
 
-import io.online.videosite.properties.VideoSiteAppProperties;
-import io.online.videosite.properties.VideoSiteAppProperties.JwtProperties;
+import io.online.videosite.constant.Constants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +27,6 @@ import java.util.Objects;
 @Slf4j
 @AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final VideoSiteAppProperties properties;
     private final JwtHelper jwtHelper;
     private final UserDetailsService userDetailsService;
 
@@ -38,11 +36,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        JwtProperties config = this.properties.getJwt();
-        log.info("doFilterInternal(): header = {}, tokenPrefix = {}",
-                header, config.getTokenPrefix());
-        if (StringUtils.hasText(header) && header.startsWith(config.getTokenPrefix())) {
-            String token = header.substring(config.getTokenPrefix().length());
+        log.info("doFilterInternal(): header = {}", header);
+        if (StringUtils.hasText(header) && header.startsWith(Constants.TOKEN_PREFIX)) {
+            String token = header.substring(Constants.TOKEN_PREFIX.length());
             log.info("doFilterInternal(): token = {}", token);
             if (StringUtils.hasText(token)) {
                 String username = this.jwtHelper.getSubject(token);

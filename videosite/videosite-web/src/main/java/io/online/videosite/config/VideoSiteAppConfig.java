@@ -129,10 +129,8 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(
-            VideoSiteAppProperties properties,
-            JwtHelper jwtHelper,
-            UserDetailsService userDetailsService) {
-        return new JwtAuthenticationFilter(properties, jwtHelper, userDetailsService);
+            JwtHelper jwtHelper, UserDetailsService userDetailsService) {
+        return new JwtAuthenticationFilter(jwtHelper, userDetailsService);
     }
 
     @Bean

@@ -10,6 +10,10 @@ public interface Constants {
      * 会话中当前登录用户的键
      */
     String SESSION_USER_KEY = "CURRENT_USER";
+    /**
+     * 令牌前缀
+     */
+    String TOKEN_PREFIX = "Bearer ";
     String JSONFORMAT_DATETIME = "yyyy-MM-dd HH:mm:ss";
     String JSONFORMAT_TIMEZONE = "GMT+8";
 }
