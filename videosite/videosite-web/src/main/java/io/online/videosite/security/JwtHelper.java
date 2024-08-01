@@ -4,9 +4,15 @@ import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.crypto.MACSigner;
-import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import com.nimbusds.jose.proc.JWSVerificationKeySelector;
+import com.nimbusds.jose.proc.SecurityContext;
+import com.nimbusds.jose.proc.SimpleSecurityContext;
+import com.nimbusds.jwt.JWTClaimNames;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier;
+import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import io.online.videosite.domain.User;
 import io.online.videosite.properties.VideoSiteAppProperties;
 import io.online.videosite.properties.VideoSiteAppProperties.JwtProperties;
@@ -15,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -78,11 +85,20 @@ public class JwtHelper {
      */
     public boolean verifyToken(String token) {
         try {
-            SignedJWT signedJWT = SignedJWT.parse(token);
-            Date expiration = signedJWT.getJWTClaimsSet().getExpirationTime();
-            log.info("verifyToken(): expiration = {}", expiration);
-            MACVerifier macVerifier = new MACVerifier(this.properties.getJwt().getSecret());
-            return expiration.after(new Date()) && signedJWT.verify(macVerifier);
+            DefaultJWTProcessor<SecurityContext> processor = new DefaultJWTProcessor<>();
+            ImmutableSecret<SecurityContext> secret = new ImmutableSecret<>(this.properties.getJwt().getSecret().getBytes());
+            JWSVerificationKeySelector<SecurityContext> selector = new JWSVerificationKeySelector<>(JWSAlgorithm.HS256, secret);
+            SimpleSecurityContext context = new SimpleSecurityContext();
+            processor.setJWSKeySelector(selector);
+            DefaultJWTClaimsVerifier<SecurityContext> verifier = new DefaultJWTClaimsVerifier<>(null, Set.of(
+                    JWTClaimNames.SUBJECT,
+                    JWTClaimNames.ISSUED_AT,
+                    JWTClaimNames.ISSUER,
+                    JWTClaimNames.EXPIRATION_TIME,
+                    JWTClaimNames.JWT_ID));
+            processor.setJWTClaimsSetVerifier(verifier);
+            processor.process(token, context);
+            return true;
         } catch (Exception e) {
         	log.error(e.getLocalizedMessage(), e);
             return false;
