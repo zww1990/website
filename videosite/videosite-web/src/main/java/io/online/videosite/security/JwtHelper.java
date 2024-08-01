@@ -80,6 +80,7 @@ public class JwtHelper {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
             Date expiration = signedJWT.getJWTClaimsSet().getExpirationTime();
+            log.info("verifyToken(): expiration = {}", expiration);
             MACVerifier macVerifier = new MACVerifier(this.properties.getJwt().getSecret());
             return expiration.after(new Date()) && signedJWT.verify(macVerifier);
         } catch (Exception e) {

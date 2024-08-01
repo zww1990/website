@@ -83,7 +83,7 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
                 .headers(AbstractHttpConfigurer::disable)
                 // 禁用请求缓存
                 .requestCache(AbstractHttpConfigurer::disable)
-                // 禁用session
+                // 禁用Spring Security使用HTTP session
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 启用登出功能
                 .logout(logout -> logout
