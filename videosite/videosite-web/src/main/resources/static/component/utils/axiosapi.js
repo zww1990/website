@@ -119,6 +119,16 @@ const videoHandleEditApi = params => {
 // 审核视频
 const videoHandleAuditApi = params => axios.put('/videohub/audit', params)
 
+// 添加请求拦截器
+axios.interceptors.request.use(config => {
+  if (store.user) {
+    config.headers.set('Authorization', 'Bearer ' + store.user.token)
+  }
+  return config
+}, err => {
+  return Promise.reject(err)
+})
+
 // 添加响应拦截器
 axios.interceptors.response.use(res => {
   return res
