@@ -4,10 +4,19 @@ import io.online.videosite.constant.AuditStatus;
 import io.online.videosite.domain.User;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class SimpleTests {
+    @Test
+    public void testDuration() {
+        try {
+            System.err.println(Duration.ofMinutes(60).toMillis());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void testRegex() {

@@ -2,6 +2,7 @@ package io.online.videosite;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import io.online.videosite.properties.VideoSiteAppProperties;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.Filter;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,9 @@ public class VideoSiteApplicationTests {
 
     @Test
     public void testContextLoads() throws Exception {
-        this.applicationContext.getBeansOfType(Filter.class).forEach((k, v) -> System.err.println(k + " = " + v));
+        System.err.println(applicationContext.getBean(VideoSiteAppProperties.class)
+                .getJwt().getExpiration().toMillis());
+//        this.applicationContext.getBeansOfType(Filter.class).forEach((k, v) -> System.err.println(k + " = " + v));
 //        System.err.println(this.applicationContext.getBeansOfType(CorsConfigurationSource.class));
 //        System.err.println(this.applicationContext.getBeansOfType(UserDetailsService.class));
 //        ObjectWriter json = applicationContext.getBean(ObjectMapper.class).writerWithDefaultPrettyPrinter();

@@ -49,7 +49,7 @@ public class JwtHelper {
                 .subject(user.getUsername())
                 .issuer(config.getIssuer())
                 .issueTime(new Date())
-                .expirationTime(new Date(System.currentTimeMillis() + config.getExpiration() * 1000L))
+                .expirationTime(new Date(System.currentTimeMillis() + config.getExpiration().toMillis()))
                 .jwtID(UUID.randomUUID().toString().replace("-", ""))
                 .build();
         SignedJWT signedJWT = new SignedJWT(jwsHeader, jwtClaimsSet);

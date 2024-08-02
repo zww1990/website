@@ -4,7 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.convert.DurationUnit;
 import org.springframework.context.annotation.Configuration;
+
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 /**
  * 自定义配置属性类
@@ -62,8 +66,9 @@ public class VideoSiteAppProperties {
          */
         private String issuer = "SpringSecurity";
         /**
-         * 失效时间，单位秒
+         * 失效时间，单位分
          */
-        private Long expiration = 3600L;
+        @DurationUnit(ChronoUnit.MINUTES)
+        private Duration expiration = Duration.ofMinutes(30);
     }
 }

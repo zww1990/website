@@ -6,14 +6,16 @@ import io.online.videosite.security.JwtHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+
 public class JwtHelperTests {
     private JwtHelper helper = null;
 
     @BeforeEach
     public void init() {
         VideoSiteAppProperties properties = new VideoSiteAppProperties();
-        // 60s
-        properties.getJwt().setExpiration(60L);
+        // 1min
+        properties.getJwt().setExpiration(Duration.ofMinutes(1));
         helper = new JwtHelper(properties);
     }
 
