@@ -29,8 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public boolean checkExist(Category category) {
         log.info("checkExist(): category = {}", category);
-        return this.categoryRepository.exists((root, query, builder) ->
-                builder.equal(root.get("categoryName"), category.getCategoryName()));
+        return this.categoryRepository.existsByCategoryName(category);
     }
 
     @Override
