@@ -28,16 +28,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> queryByVideoId(Integer videoId) {
-        List<Comment> comments = this.commentRepository.findAll(
-                (root, query, builder) -> builder.equal(root.get("videoId"), videoId),
-                Sort.by(Sort.Direction.DESC, "id"));
+        List<Comment> comments = this.commentRepository.findByVideoIdSortById(videoId);
         if (!comments.isEmpty()) {
             // 收集评论人的用户名
             List<String> usernames = comments.stream().map(Comment::getCreator).distinct().toList();
             // 按用户名查询一组用户
-            List<User> users = this.userRepository.findAll((root, query, builder) -> root.get("username").in(usernames));
+            List<User> users = this.userRepository.findByUsernames(usernames);
             // 组装Map，键是用户名，值是用户昵称
-            Map<String, String> nameMap = users.stream().collect(Collectors.toMap(User::getUsername, User::getNickname, (a, b) -> b));
+            Map<String, String> nameMap = users.stream().collect(
+                    Collectors.toMap(User::getUsername, User::getNickname, (a, b) -> b));
             // 填充评论人的昵称
             comments.forEach(f -> {
                 // 如果取不到昵称，就设置为用户名

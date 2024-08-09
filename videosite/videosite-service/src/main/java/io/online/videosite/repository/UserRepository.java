@@ -4,6 +4,7 @@ import io.online.videosite.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,5 +21,14 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
      */
     default Optional<User> findByUsername(String username) {
         return this.findOne((root, query, builder) -> builder.equal(root.get("username"), username));
+    }
+
+    /**
+     * Find By Usernames
+     * @param usernames usernames
+     * @return List of User
+     */
+    default List<User> findByUsernames(List<String> usernames) {
+        return this.findAll((root, query, builder) -> root.get("username").in(usernames));
     }
 }
