@@ -4,6 +4,8 @@ import io.online.videosite.domain.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.Optional;
+
 /**
  * 权限数据访问对象接口
  *
@@ -12,4 +14,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  */
 public interface AuthorityRepository extends JpaRepository<Authority, Integer>,
         JpaSpecificationExecutor<Authority> {
+    /**
+     * Find By Authority
+     * @param authority 权限编码
+     * @return {@link Authority}
+     */
+    default Optional<Authority> findByAuthority(String authority) {
+        return this.findOne((root, query, builder) ->
+                builder.equal(root.get("authority"), authority));
+    }
 }

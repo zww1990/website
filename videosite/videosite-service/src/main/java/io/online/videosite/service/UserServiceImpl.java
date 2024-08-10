@@ -40,8 +40,7 @@ public class UserServiceImpl implements UserService {
         user.setAccountNonLocked(true);
         user.setAccountNonExpired(true);
         user.setCredentialsNonExpired(true);
-        Authority authority = this.authorityRepository.findOne((root, query, builder) ->
-                builder.equal(root.get("authority"), UserType.ROLE_NORMAL.name()))
+        Authority authority = this.authorityRepository.findByAuthority(UserType.ROLE_NORMAL.name())
                 .orElseGet(() -> {
                     Authority a = new Authority();
                     a.setCreator(user.getUsername());
