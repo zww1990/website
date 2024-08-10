@@ -15,7 +15,7 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Integer>, JpaSpecificationExecutor<Comment> {
     /**
      * Find By Video Id Sort By Id
-     * @param videoId Video Id
+     * @param videoId 视频主键
      * @return List of Comment
      */
     default List<Comment> findByVideoIdSortById(Integer videoId) {
