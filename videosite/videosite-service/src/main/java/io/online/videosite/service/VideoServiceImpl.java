@@ -8,11 +8,8 @@ import io.online.videosite.model.VideoModel;
 import io.online.videosite.properties.VideoSiteAppProperties;
 import io.online.videosite.repository.*;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.criteria.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -20,7 +17,6 @@ import org.springframework.util.StringUtils;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -46,22 +42,10 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public List<Video> query(Integer categoryId, AuditStatus... auditStatus) {
         log.info("query(): categoryId = {}, auditStatus = {}", categoryId, auditStatus);
-        List<Video> videos = this.videoRepository.findAll((root, query, builder) -> {
-            List<Predicate> list = new ArrayList<>();
-            // 如果指定审核状态
-            if (auditStatus.length != 0) {
-                list.add(root.get("auditStatus").in(auditStatus));
-            }
-            // 如果指定类别
-            if (categoryId != null) {
-                list.add(builder.equal(root.get("categoryId"), categoryId));
-            }
-            return query.where(list.toArray(Predicate[]::new)).getRestriction();
-        }, Sort.by(Direction.DESC, "videoHits"));
+        List<Video> videos = this.videoRepository.findByCategoryIdAndAuditStatus(categoryId, auditStatus);
         // 收集视频作者
         List<String> creators = videos.stream().map(Video::getCreator).distinct().toList();
-        Map<String, User> userMap = this.userRepository.findAll(
-                        (root, query, builder) -> root.get("username").in(creators))
+        Map<String, User> userMap = this.userRepository.findByUsernames(creators)
                 .stream().collect(Collectors.toMap(User::getUsername, Function.identity()));
         videos.forEach(f -> {
             // 组装视频封面、文件在服务器的存储路径
@@ -76,16 +60,7 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public List<Video> queryForUser(User user) {
         log.info("queryForUser(): user = {}", user);
-        return this.videoRepository.findAll((root, query, builder) -> {
-            // 如果是管理员，查询所有视频
-            if (user.getAuthorities()
-                    .stream()
-                    .map(Authority::getAuthority)
-                    .anyMatch(p -> UserType.valueOf(p) == UserType.ROLE_ADMIN)) {
-                return query.getRestriction();
-            }
-            return builder.equal(root.get("creator"), user.getUsername());
-        }, Sort.by(Direction.DESC, "id")).stream().peek(p -> {
+        return this.videoRepository.findByUser(user).stream().peek(p -> {
             // 组装视频封面、文件在服务器的存储路径
             p.setVideoLogo(String.format("%s/%s", this.appProps.getImageUploadFolder(), p.getVideoLogo()));
             p.setVideoLink(String.format("%s/%s", this.appProps.getVideoUploadFolder(), p.getVideoLink()));
@@ -95,17 +70,13 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public List<Video> queryForKeyword(String keyword) {
         log.info("queryForKeyword(): keyword = {}", keyword);
-        List<Video> videos = this.videoRepository.findAll((root, query, builder) ->
-                        builder.and(builder.equal(root.get("auditStatus"), AuditStatus.PASSED),
-                                builder.like(root.get("videoName"), "%" + keyword + "%")),
-                Sort.by(Direction.DESC, "id"));
+        List<Video> videos = this.videoRepository.findByAuditStatusAndVideoName(keyword);
         if (videos.isEmpty()) {
             return videos;
         }
         // 收集视频作者
         List<String> creators = videos.stream().map(Video::getCreator).distinct().toList();
-        Map<String, User> userMap = this.userRepository.findAll(
-                        (root, query, builder) -> root.get("username").in(creators))
+        Map<String, User> userMap = this.userRepository.findByUsernames(creators)
                 .stream().collect(Collectors.toMap(User::getUsername, Function.identity()));
         videos.forEach(f -> {
             // 组装视频封面、文件在服务器的存储路径
@@ -153,11 +124,8 @@ public class VideoServiceImpl implements VideoService {
             // 如果是登录状态，记录用户观看历史
             Optional.ofNullable(user).ifPresent(c -> {
                 // 按视频主键、观影人查询一条历史记录
-                VideoHistory vh = this.videoHistoryRepository.findOne(
-                        (root, query, builder) -> builder.and(
-                                builder.equal(root.get("videoId"), id),
-                                builder.equal(root.get("creator"), user.getUsername())
-                        )).orElseGet(() -> {
+                VideoHistory vh = this.videoHistoryRepository.findByVideoIdAndCreator(id, user)
+                        .orElseGet(() -> {
                     VideoHistory tmp = new VideoHistory();
                     tmp.setPlayCount(0);
                     tmp.setVideoId(id);
@@ -217,11 +185,9 @@ public class VideoServiceImpl implements VideoService {
     public void delete(Video video) {
         log.info("delete(): video = {}", video);
         // 删除视频评论
-        this.commentRepository.delete((root, query, builder) ->
-                builder.equal(root.get("videoId"), video.getId()));
+        this.commentRepository.deleteByVideoId(video);
         // 删除视频观看历史
-        this.videoHistoryRepository.delete((root, query, builder) ->
-                builder.equal(root.get("videoId"), video.getId()));
+        this.videoHistoryRepository.deleteByVideoId(video);
         // 删除视频数据
         this.videoRepository.delete(video);
         // 然后再删除视频封面、链接文件，避免删除失败，误删。
