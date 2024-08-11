@@ -6,6 +6,7 @@ drop table if exists t_video_history;
 drop table if exists t_comment;
 drop table if exists t_video;
 drop table if exists t_category;
+drop table if exists t_json_web_token;
 
 -- 删除序列
 drop sequence if exists t_user_id_seq;
@@ -30,6 +31,26 @@ create sequence if not exists t_comment_id_seq;
 comment on sequence t_comment_id_seq is '视频评论表主键序列';
 
 -- 创建表
+create table if not exists t_json_web_token (
+    jwt_id          varchar(64)  not null primary key,
+    subject         varchar(64)  not null,
+    issuer          varchar(64)  not null,
+    issued_at       timestamp    not null,
+    expiration_time timestamp    not null,
+    not_before      timestamp    not null default now(),
+    audience        varchar(256) null,
+    token           text         not null
+);
+comment on table t_json_web_token is 'JSON令牌表';
+comment on column t_json_web_token.jwt_id is '令牌的唯一标识符';
+comment on column t_json_web_token.subject is '令牌的主题，通常是用户的唯一标识符';
+comment on column t_json_web_token.issuer is '令牌的发行者';
+comment on column t_json_web_token.issued_at is '令牌的颁发时间，即创建时间';
+comment on column t_json_web_token.expiration_time is '令牌的过期时间';
+comment on column t_json_web_token.not_before is '令牌的生效时间，即创建时间';
+comment on column t_json_web_token.audience is '令牌的受众，表示该令牌针对哪些接收者';
+comment on column t_json_web_token.token is 'JSON令牌';
+
 create table if not exists t_user (
   id                      int          default nextval('t_user_id_seq'::regclass) primary key,
   username                varchar(64)  not null                                   unique,

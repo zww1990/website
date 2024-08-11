@@ -2,6 +2,8 @@ package io.online.videosite;
 
 import io.online.videosite.domain.User;
 import io.online.videosite.properties.VideoSiteAppProperties;
+import io.online.videosite.repository.JsonWebTokenRepository;
+import io.online.videosite.repository.impl.DefaultJsonWebTokenRepository;
 import io.online.videosite.security.JwtHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,9 +16,10 @@ public class JwtHelperTests {
     @BeforeEach
     public void init() {
         VideoSiteAppProperties properties = new VideoSiteAppProperties();
+        JsonWebTokenRepository jsonWebTokenRepository = new DefaultJsonWebTokenRepository();
         // 1min
         properties.getJwt().setExpiration(Duration.ofMinutes(1));
-        helper = new JwtHelper(properties);
+        helper = new JwtHelper(properties, jsonWebTokenRepository);
     }
 
     @Test

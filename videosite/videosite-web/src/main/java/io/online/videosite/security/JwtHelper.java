@@ -13,9 +13,11 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
+import io.online.videosite.domain.JdbcJsonWebToken;
 import io.online.videosite.domain.User;
 import io.online.videosite.properties.VideoSiteAppProperties;
 import io.online.videosite.properties.VideoSiteAppProperties.JwtProperties;
+import io.online.videosite.repository.JsonWebTokenRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -34,6 +36,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class JwtHelper {
     private final VideoSiteAppProperties properties;
+    private final JsonWebTokenRepository jsonWebTokenRepository;
 
     /**
      * 创建JWT令牌
@@ -56,7 +59,16 @@ public class JwtHelper {
         try {
             MACSigner macSigner = new MACSigner(config.getSecret());
             signedJWT.sign(macSigner);
-            return signedJWT.serialize();
+            String token = signedJWT.serialize();
+            // 持久化jwt
+            this.jsonWebTokenRepository.createNewToken(new JdbcJsonWebToken()
+                    .setToken(token)
+                    .setJwtId(jwtClaimsSet.getJWTID())
+                    .setSubject(jwtClaimsSet.getSubject())
+                    .setIssuer(jwtClaimsSet.getIssuer())
+                    .setIssuedAt(jwtClaimsSet.getIssueTime())
+                    .setExpirationTime(jwtClaimsSet.getExpirationTime()));
+            return token;
         } catch (Exception e) {
             log.error(e.getLocalizedMessage(), e);
             return null;
