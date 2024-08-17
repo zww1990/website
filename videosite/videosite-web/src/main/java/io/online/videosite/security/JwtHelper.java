@@ -14,6 +14,7 @@ import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import io.online.videosite.domain.JdbcJsonWebToken;
+import io.online.videosite.domain.JsonWebToken;
 import io.online.videosite.domain.User;
 import io.online.videosite.properties.VideoSiteAppProperties;
 import io.online.videosite.properties.VideoSiteAppProperties.JwtProperties;
@@ -40,7 +41,7 @@ public class JwtHelper {
 
     /**
      * 创建JWT令牌
-     * @param user 用户信息
+     * @param user {@link User}
      * @return JWT令牌，如果创建失败，返回null值
      */
     public String createToken(User user) {
@@ -76,14 +77,21 @@ public class JwtHelper {
     }
 
     /**
-     * 获取用户名
+     * 获取JSON令牌
      * @param token JWT令牌
-     * @return 用户名，如果解析失败，返回null值
+     * @return {@link JsonWebToken}
      */
-    public String getSubject(String token) {
+    public JsonWebToken getJsonWebToken(String token) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
-            return signedJWT.getJWTClaimsSet().getSubject();
+            JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
+            return new JdbcJsonWebToken()
+                    .setToken(token)
+                    .setJwtId(jwtClaimsSet.getJWTID())
+                    .setSubject(jwtClaimsSet.getSubject())
+                    .setIssuer(jwtClaimsSet.getIssuer())
+                    .setIssuedAt(jwtClaimsSet.getIssueTime())
+                    .setExpirationTime(jwtClaimsSet.getExpirationTime());
         } catch (Exception e) {
             log.error(e.getLocalizedMessage(), e);
             return null;

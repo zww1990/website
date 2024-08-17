@@ -3,6 +3,7 @@ package io.online.videosite.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.online.videosite.constant.UserType;
 import io.online.videosite.properties.VideoSiteAppProperties;
+import io.online.videosite.repository.JsonWebTokenRepository;
 import io.online.videosite.security.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -129,22 +130,32 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(
-            JwtHelper jwtHelper, UserDetailsService userDetailsService) {
-        return new JwtAuthenticationFilter(jwtHelper, userDetailsService);
+            JwtHelper jwtHelper,
+            UserDetailsService userDetailsService,
+            JsonWebTokenRepository jsonWebTokenRepository,
+            JsonAuthenticationFailureHandler jsonAuthenticationFailureHandler) {
+        return new JwtAuthenticationFilter(jwtHelper, userDetailsService,
+                jsonWebTokenRepository, jsonAuthenticationFailureHandler);
     }
 
     @Bean
     public JsonLoginAuthenticationFilter jsonLoginAuthenticationFilter(
             ObjectMapper objectMapper,
             AuthenticationManager authenticationManager,
-            JwtHelper jwtHelper) {
+            JwtHelper jwtHelper,
+            JsonAuthenticationFailureHandler jsonAuthenticationFailureHandler) {
         JsonLoginAuthenticationFilter filter = new JsonLoginAuthenticationFilter(objectMapper);
         filter.setAuthenticationManager(authenticationManager);
         filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
         filter.setFilterProcessesUrl("/user/login");
-        filter.setAuthenticationFailureHandler(new JsonAuthenticationFailureHandler(objectMapper));
+        filter.setAuthenticationFailureHandler(jsonAuthenticationFailureHandler);
         filter.setAuthenticationSuccessHandler(new JsonAuthenticationSuccessHandler(objectMapper, jwtHelper));
         return filter;
+    }
+
+    @Bean
+    public JsonAuthenticationFailureHandler jsonAuthenticationFailureHandler(ObjectMapper objectMapper) {
+        return new JsonAuthenticationFailureHandler(objectMapper);
     }
 
     @Bean
