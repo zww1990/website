@@ -95,7 +95,7 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
                         .authenticationEntryPoint(jsonAuthenticationEntryPoint)
                         .accessDeniedHandler(jsonAccessDeniedHandler))
                 // 添加过滤器
-                .addFilterAfter(jwtAuthenticationFilter, LogoutFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, LogoutFilter.class)
                 .addFilterAfter(jsonLoginAuthenticationFilter, LogoutFilter.class)
         ;
         return http.build();
@@ -164,8 +164,9 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
     }
 
     @Bean
-    public JsonLogoutSuccessHandler jsonLogoutSuccessHandler(ObjectMapper objectMapper) {
-        return new JsonLogoutSuccessHandler(objectMapper);
+    public JsonLogoutSuccessHandler jsonLogoutSuccessHandler(
+            ObjectMapper objectMapper, JsonWebTokenRepository jsonWebTokenRepository) {
+        return new JsonLogoutSuccessHandler(objectMapper, jsonWebTokenRepository);
     }
 
     @Bean

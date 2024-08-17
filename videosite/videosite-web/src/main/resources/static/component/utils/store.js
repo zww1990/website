@@ -17,13 +17,13 @@ export const store = reactive({
     sessionStorage.setItem('CURRENT_USER', JSON.stringify(currentUser))
   },
 
-  clearUser(isLogoutApi) {
+  async clearUser(isLogoutApi) {
     console.log('Session Storage Remove Item: Current User')
+    if(isLogoutApi === true){
+      await logoutApi()
+    }
     this.user = null
     sessionStorage.removeItem('CURRENT_USER')
-    if(isLogoutApi === true){
-      logoutApi()
-    }
   },
 
   getMenus() {

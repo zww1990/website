@@ -1,6 +1,8 @@
 package io.online.videosite.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.online.videosite.domain.JsonWebToken;
+import io.online.videosite.repository.JsonWebTokenRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +16,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 /**
  * JSON登出成功处理程序
@@ -25,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 @AllArgsConstructor
 public class JsonLogoutSuccessHandler implements LogoutSuccessHandler {
     private final ObjectMapper objectMapper;
+    private final JsonWebTokenRepository jsonWebTokenRepository;
 
     @Override
     public void onLogoutSuccess(
@@ -35,6 +39,11 @@ public class JsonLogoutSuccessHandler implements LogoutSuccessHandler {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
+        Optional.ofNullable(authentication)
+                .map(Authentication::getCredentials)
+                .map(m -> (JsonWebToken) m)
+                .map(JsonWebToken::getJwtId)
+                .ifPresent(this.jsonWebTokenRepository::removeToken);
         try (PrintWriter out = response.getWriter()) {
             out.write(this.objectMapper.writeValueAsString("注销成功！"));
         }
