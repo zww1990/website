@@ -2,6 +2,7 @@
 drop database if exists videosite;
 create database if not exists videosite;
 
+-- 删除表
 drop table if exists t_user_authority;
 drop table if exists t_user;
 drop table if exists t_authority;
@@ -9,6 +10,19 @@ drop table if exists t_video_history;
 drop table if exists t_comment;
 drop table if exists t_video;
 drop table if exists t_category;
+drop table if exists t_json_web_token;
+
+-- 创建表
+create table if not exists t_json_web_token (
+    jwt_id          varchar(64)  not null primary key   comment '令牌的唯一标识符',
+    subject         varchar(64)  not null               comment '令牌的主题，通常是用户的唯一标识符',
+    issuer          varchar(64)  not null               comment '令牌的发行者',
+    issued_at       datetime     not null               comment '令牌的颁发时间，即创建时间',
+    expiration_time datetime     not null               comment '令牌的过期时间',
+    not_before      datetime     not null default now() comment '令牌的生效时间，即创建时间',
+    audience        varchar(256) null                   comment '令牌的受众，表示该令牌针对哪些接收者',
+    token           text         not null               comment 'JSON令牌'
+) comment 'JSON令牌表';
 
 create table if not exists t_user (
     id                      int          auto_increment primary key                   comment '主键',
