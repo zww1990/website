@@ -142,36 +142,15 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
     public JsonLoginAuthenticationFilter jsonLoginAuthenticationFilter(
             ObjectMapper objectMapper,
             AuthenticationManager authenticationManager,
-            JwtHelper jwtHelper,
-            JsonAuthenticationFailureHandler jsonAuthenticationFailureHandler) {
+            JsonAuthenticationFailureHandler jsonAuthenticationFailureHandler,
+            JsonAuthenticationSuccessHandler jsonAuthenticationSuccessHandler) {
         JsonLoginAuthenticationFilter filter = new JsonLoginAuthenticationFilter(objectMapper);
         filter.setAuthenticationManager(authenticationManager);
         filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
         filter.setFilterProcessesUrl("/user/login");
         filter.setAuthenticationFailureHandler(jsonAuthenticationFailureHandler);
-        filter.setAuthenticationSuccessHandler(new JsonAuthenticationSuccessHandler(objectMapper, jwtHelper));
+        filter.setAuthenticationSuccessHandler(jsonAuthenticationSuccessHandler);
         return filter;
-    }
-
-    @Bean
-    public JsonAuthenticationFailureHandler jsonAuthenticationFailureHandler(ObjectMapper objectMapper) {
-        return new JsonAuthenticationFailureHandler(objectMapper);
-    }
-
-    @Bean
-    public JsonAuthenticationEntryPoint jsonAuthenticationEntryPoint(ObjectMapper objectMapper) {
-        return new JsonAuthenticationEntryPoint(objectMapper);
-    }
-
-    @Bean
-    public JsonLogoutSuccessHandler jsonLogoutSuccessHandler(
-            ObjectMapper objectMapper, JsonWebTokenRepository jsonWebTokenRepository) {
-        return new JsonLogoutSuccessHandler(objectMapper, jsonWebTokenRepository);
-    }
-
-    @Bean
-    public JsonAccessDeniedHandler jsonAccessDeniedHandler(ObjectMapper objectMapper) {
-        return new JsonAccessDeniedHandler(objectMapper);
     }
 
     /**
@@ -179,7 +158,7 @@ public class VideoSiteAppConfig implements WebMvcConfigurer, ErrorPageRegistrar 
      */
     @Bean
     public RoleHierarchy roleHierarchy() {
-        return RoleHierarchyImpl.fromHierarchy(
-                String.format("%s > %s", UserType.ROLE_ADMIN.name(), UserType.ROLE_NORMAL.name()));
+        return RoleHierarchyImpl.fromHierarchy(String.format("%s > %s",
+                UserType.ROLE_ADMIN.name(), UserType.ROLE_NORMAL.name()));
     }
 }
