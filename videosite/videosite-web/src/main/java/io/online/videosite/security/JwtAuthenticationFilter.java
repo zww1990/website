@@ -26,6 +26,7 @@ import java.util.Objects;
 
 /**
  * JWT身份验证过滤器
+ *
  * @author 张维维
  * @since 2024-07-31 15:21:35
  */
@@ -64,9 +65,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         }
                     }
                 } else {
-                    BadJwtException exception = new BadJwtException("无效的JWT");
+                    BadJwtException cause = new BadJwtException("无效的JWT");
+                    log.error(cause.getLocalizedMessage(), cause);
                     this.failureHandler.onAuthenticationFailure(request, response,
-                            new BadCredentialsException(exception.getLocalizedMessage(), exception));
+                            new BadCredentialsException("会话失效，请重新登录。", cause));
                     return;
                 }
             }
