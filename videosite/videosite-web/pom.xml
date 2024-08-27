@@ -21,7 +21,7 @@
 		<ant-design-vue.version>4.2.3</ant-design-vue.version>
 		<dayjs.version>1.11.13</dayjs.version>
 		<font-awesome.version>4.7.0</font-awesome.version>
-		<axios.version>1.7.4</axios.version>
+		<axios.version>1.7.5</axios.version>
 	</properties>
 
 	<dependencies>
