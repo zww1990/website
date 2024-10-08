@@ -16,7 +16,7 @@
 	<description>web 模块，对应 MVC 的 V 概念，存放视图层的逻辑</description>
 
 	<properties>
-		<vue.version>3.5.10</vue.version>
+		<vue.version>3.5.11</vue.version>
 		<vue-router.version>4.4.5</vue-router.version>
 		<ant-design-vue.version>4.2.5</ant-design-vue.version>
 		<dayjs.version>1.11.13</dayjs.version>
