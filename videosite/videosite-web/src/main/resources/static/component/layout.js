@@ -57,7 +57,7 @@ export default {
        </a-layout-header>
        <a-layout-content :style="{ padding: '0 50px', marginTop: '64px' }">
          <nav class="ant-breadcrumb" style="margin: 10px 0px;"></nav>
-         <div :style="{ background: '#fff', padding: '24px', minHeight: '604px' }">
+         <div :style="{ background: '#fff', padding: '24px', minHeight: '815px' }">
            <Suspense>
             <router-view></router-view>
            </Suspense>
