@@ -70,20 +70,21 @@ create table if not exists t_category (
 ) comment '视频类别表';
 
 create table if not exists t_video (
-    id            int          auto_increment primary key                   comment '主键',
-    video_name    varchar(128) not null                                     comment '视频名称',
-    video_link    varchar(256) not null                                     comment '视频链接',
-    video_logo    varchar(256) not null                                     comment '视频封面',
-    video_hits    int          not null       default 0                     comment '视频播放量',
-    category_id   int          not null                                     comment '视频类别主键',
-    created_date  datetime     not null       default now()                 comment '创建时间',
-    creator       varchar(64)  not null                                     comment '创建人',
-    modified_date datetime     not null       default now() on update now() comment '修改时间',
-    modifier      varchar(64)  not null                                     comment '修改人',
-    audit_status  varchar(32)  not null                                     comment '审核状态',
-    audited_date  datetime                                                  comment '审核时间',
-    auditor       varchar(64)                                               comment '审核人',
-    audit_reason  varchar(256)                                              comment '审核不通过原因',
+    id              int          auto_increment primary key                   comment '主键',
+    video_name      varchar(128) not null                                     comment '视频名称',
+    video_link      varchar(256) not null                                     comment '视频链接',
+    video_link_md5  varchar(32)  not null                                     comment '视频链接MD5',
+    video_logo      varchar(256) not null                                     comment '视频封面',
+    video_hits      int          not null       default 0                     comment '视频播放量',
+    category_id     int          not null                                     comment '视频类别主键',
+    created_date    datetime     not null       default now()                 comment '创建时间',
+    creator         varchar(64)  not null                                     comment '创建人',
+    modified_date   datetime     not null       default now() on update now() comment '修改时间',
+    modifier        varchar(64)  not null                                     comment '修改人',
+    audit_status    varchar(32)  not null                                     comment '审核状态',
+    audited_date    datetime                                                  comment '审核时间',
+    auditor         varchar(64)                                               comment '审核人',
+    audit_reason    varchar(256)                                              comment '审核不通过原因',
     foreign key (category_id) references t_category (id) on delete cascade
 ) comment '视频表';
 

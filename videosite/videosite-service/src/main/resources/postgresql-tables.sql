@@ -127,26 +127,28 @@ comment on column t_category.modified_date is '修改时间';
 comment on column t_category.modifier is '修改人';
 
 create table if not exists t_video (
-  id            int          default nextval('t_video_id_seq'::regclass) primary key,
-  video_name    varchar(128) not null,
-  video_link    varchar(256) not null,
-  video_logo    varchar(256) not null,
-  video_hits    int          not null                                    default 0,
-  category_id   int          not null,
-  created_date  timestamp    not null                                    default now(),
-  creator       varchar(64)  not null,
-  modified_date timestamp    not null                                    default now(),
-  modifier      varchar(64)  not null,
-  audit_status  varchar(32)  not null,
-  audited_date  timestamp,
-  auditor       varchar(64),
-  audit_reason  varchar(256),
+  id                int          default nextval('t_video_id_seq'::regclass) primary key,
+  video_name        varchar(128) not null,
+  video_link        varchar(256) not null,
+  video_link_md5    varchar(32)  not null,
+  video_logo        varchar(256) not null,
+  video_hits        int          not null                                    default 0,
+  category_id       int          not null,
+  created_date      timestamp    not null                                    default now(),
+  creator           varchar(64)  not null,
+  modified_date     timestamp    not null                                    default now(),
+  modifier          varchar(64)  not null,
+  audit_status      varchar(32)  not null,
+  audited_date      timestamp,
+  auditor           varchar(64),
+  audit_reason      varchar(256),
   foreign key (category_id) references t_category (id) on delete cascade
 );
 comment on table t_video is '视频表';
 comment on column t_video.id is '主键';
 comment on column t_video.video_name is '视频名称';
 comment on column t_video.video_link is '视频链接';
+comment on column t_video.video_link_md5 is '视频链接MD5';
 comment on column t_video.video_logo is '视频封面';
 comment on column t_video.video_hits is '视频播放量';
 comment on column t_video.category_id is '视频类别主键';
