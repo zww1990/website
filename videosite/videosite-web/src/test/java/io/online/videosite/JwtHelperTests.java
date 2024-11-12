@@ -38,7 +38,7 @@ public class JwtHelperTests {
     public void testVerifyToken() {
         try {
             String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTcHJpbmdTZWN1cml0eSIsInN1YiI6InNwcmluZyIsImV4cCI6MTcyMjQ4NTQxOSwiaWF0IjoxNzIyNDg1MzU5LCJqdGkiOiJlZjcyOTZhNzNkYjg0N2I0OGVmOTJkMzcyMGE0ODliMCJ9.999IZ0i0O69tn7-snVd7L2Na6dXGn1xmuhdDfxmYGkw";
-            boolean result = helper.verifyToken(token);
+            boolean result = helper.verifyToken(token, null);
             System.err.println(result);
         } catch (Exception e) {
             e.printStackTrace();

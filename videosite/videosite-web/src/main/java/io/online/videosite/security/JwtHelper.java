@@ -101,9 +101,10 @@ public class JwtHelper {
     /**
      * 校验JWT令牌
      * @param token JWT令牌
+     * @param jwtId JWT ID
      * @return true or false
      */
-    public boolean verifyToken(String token) {
+    public boolean verifyToken(String token, String jwtId) {
         try {
             DefaultJWTProcessor<SecurityContext> processor = new DefaultJWTProcessor<>();
             ImmutableSecret<SecurityContext> secret = new ImmutableSecret<>(this.properties.getJwt().getSecret().getBytes());
@@ -121,6 +122,10 @@ public class JwtHelper {
             return true;
         } catch (Exception e) {
         	log.error(e.getLocalizedMessage(), e);
+            if (jwtId != null) {
+                // 验证失败后，将数据库里存在的删除掉。
+                this.jsonWebTokenRepository.removeToken(jwtId);
+            }
             return false;
         }
     }
