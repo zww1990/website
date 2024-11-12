@@ -87,4 +87,11 @@ public interface VideoService {
      * @param video {@link Video}
      */
     void update(VideoModel model, User user, Video video);
+
+    /**
+     * 查询视频链接MD5是否存在
+     * @param videoLinkMd5 视频链接MD5
+     * @return true存在，false不存在
+     */
+    boolean existsByVideoLinkMd5(String videoLinkMd5);
 }

@@ -11,8 +11,24 @@ export default {
       categoryId: undefined,
       videoLogo: null,
       videoLink: null,
+      videoLinkMd5: null,
     })
-    const onFinish = values => {
+
+    const calculateMd5 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const spark = new SparkMD5.ArrayBuffer();
+                spark.append(reader.result);
+                resolve(spark.end());
+            };
+            reader.onerror = () => reject(reader.error);
+            reader.readAsArrayBuffer(file);
+        });
+    }
+
+    const onFinish = async values => {
+      values.videoLinkMd5 = await calculateMd5(values.videoLink)
       videoAddApi(values)
       .then(res => router.push('/video/addsuc'))
       .catch(err => message.error(err.response.data))

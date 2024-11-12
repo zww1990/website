@@ -163,6 +163,7 @@ public class VideoServiceImpl implements VideoService {
         video.setCategoryId(model.getCategoryId());
         video.setVideoHits(0);
         video.setVideoLogo(model.getVideoLogoPath());
+        video.setVideoLinkMd5(model.getVideoLinkMd5());
         video.setVideoLink(model.getVideoLinkPath());
         video.setCreator(user.getUsername());
         video.setModifier(user.getUsername());
@@ -258,5 +259,11 @@ public class VideoServiceImpl implements VideoService {
                 log.error(e.getLocalizedMessage(), e);
             }
         }
+    }
+
+    @Override
+    public boolean existsByVideoLinkMd5(String videoLinkMd5) {
+        log.info("existsByVideoLinkMd5(): videoLinkMd5 = {}", videoLinkMd5);
+        return this.videoRepository.existsByVideoLinkMd5(videoLinkMd5);
     }
 }

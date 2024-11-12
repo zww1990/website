@@ -69,4 +69,13 @@ public interface VideoRepository extends JpaRepository<Video, Integer>, JpaSpeci
                                 builder.like(root.get("videoName"), "%" + keyword + "%")),
                 Sort.by(Sort.Direction.DESC, "id"));
     }
+
+    /**
+     * Exists By Video Link MD5
+     * @param videoLinkMd5 视频链接MD5
+     * @return true or false
+     */
+    default boolean existsByVideoLinkMd5(String videoLinkMd5) {
+        return this.exists((root, query, builder) -> builder.equal(root.get("videoLinkMd5"), videoLinkMd5));
+    }
 }

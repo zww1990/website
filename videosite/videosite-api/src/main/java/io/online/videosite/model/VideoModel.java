@@ -31,6 +31,10 @@ public class VideoModel {
      */
     private MultipartFile videoLink;
     /**
+     * 视频链接MD5
+     */
+    private String videoLinkMd5;
+    /**
      * 视频封面
      */
     private MultipartFile videoLogo;

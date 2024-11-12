@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.PathContainer;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -207,10 +208,17 @@ public class VideoController {
                     .contentType(MediaType.APPLICATION_JSON)
                     .body("上传视频文件的格式不正确，请重新上传！");
         }
+        if (this.videoService.existsByVideoLinkMd5(model.getVideoLinkMd5())) {
+            return ResponseEntity.badRequest()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body("此视频文件已存在，请重新上传！");
+        }
         log.info("handleAdd(): VideoLogo = {}, VideoLink = {}",
                 model.getVideoLogo().getOriginalFilename(), model.getVideoLink().getOriginalFilename());
         model.setVideoLogoPath(this.makeFileName(model.getVideoLogo().getOriginalFilename()));
         model.setVideoLinkPath(this.makeFileName(model.getVideoLink().getOriginalFilename()));
+        // 生成视频文件的MD5
+        model.setVideoLinkMd5(DigestUtils.md5DigestAsHex(model.getVideoLink().getInputStream()));
         // 先保存数据
         this.videoService.save(model, user);
         // 然后再写入文件，避免保存失败，上传临时文件。
