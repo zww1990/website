@@ -22,6 +22,7 @@
 		<dayjs.version>1.11.13</dayjs.version>
 		<font-awesome.version>4.7.0</font-awesome.version>
 		<axios.version>1.7.7</axios.version>
+		<spark-md5.version>3.0.2</spark-md5.version>
 	</properties>
 
 	<dependencies>
@@ -244,6 +245,13 @@
 					<artifactId>proxy-from-env</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<!-- spark-md5 -->
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>spark-md5</artifactId>
+			<version>${spark-md5.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 
