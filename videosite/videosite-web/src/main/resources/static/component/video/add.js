@@ -31,8 +31,8 @@ export default {
     const onFinish = async values => {
       values.videoLinkMd5 = await calculateMd5(values.videoLink)
       videoAddApi(values)
-      .then(res => router.push('/video/addsuc'))
-      .catch(err => message.error(err.response.data))
+        .then(res => router.push('/video/addsuc'))
+        .catch(err => message.error(err.response.data))
     }
 
     const categories = (await categoryListApi()).map(({ id, categoryName }) => {
