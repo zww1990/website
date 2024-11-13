@@ -297,7 +297,8 @@ public class VideoController {
             log.info("handleEdit(): VideoLink = {}", model.getVideoLink().getOriginalFilename());
             model.setVideoLinkPath(this.makeFileName(model.getVideoLink().getOriginalFilename()));
         }
-        if (video.getVideoLinkMd5().equals(model.getVideoLinkMd5())) {
+        if (video.getVideoLinkMd5().equals(model.getVideoLinkMd5()) ||
+                this.videoService.existsByVideoLinkMd5(model.getVideoLinkMd5())) {
             return ResponseEntity.badRequest()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body("此视频文件已存在，请重新上传！");
