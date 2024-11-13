@@ -44,15 +44,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        log.info("doFilterInternal(): header = {}", header);
+        log.debug("doFilterInternal(): header = {}", header);
         if (StringUtils.hasText(header) && header.startsWith(Constants.TOKEN_PREFIX)) {
             String token = header.substring(Constants.TOKEN_PREFIX.length());
-            log.info("doFilterInternal(): token = {}", token);
+            log.debug("doFilterInternal(): token = {}", token);
             if (StringUtils.hasText(token)) {
                 JsonWebToken jsonWebToken = this.jwtHelper.getJsonWebToken(token);
                 String username = jsonWebToken.getSubject();
                 String jwtId = jsonWebToken.getJwtId();
-                log.info("doFilterInternal(): username = {}, jwtId = {}", username, jwtId);
+                log.debug("doFilterInternal(): username = {}, jwtId = {}", username, jwtId);
                 if (this.jsonWebTokenRepository.getToken(jwtId).isPresent()) {
                     if (StringUtils.hasText(username) &&
                             Objects.isNull(SecurityContextHolder.getContext().getAuthentication())) {
