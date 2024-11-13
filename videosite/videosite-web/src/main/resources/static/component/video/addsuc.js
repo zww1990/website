@@ -1,12 +1,15 @@
 export default {
   setup() {
     const router = VueRouter.useRouter()
+
     const goVideoAdd = () => {
       router.push('/video/add')
     }
+
     const goHome = () => {
       router.push('/')
     }
+
     return { goVideoAdd, goHome }
   },
   template: `
