@@ -8,6 +8,7 @@ export default {
   setup() {
     const router = VueRouter.useRouter()
     const route = VueRouter.useRoute()
+
     const audit = ref({
       id: +route.params.id,
       auditStatus: '',
@@ -17,10 +18,13 @@ export default {
       { label: '审核不通过', value: 'UNPASSED' },
       ]
     })
+
     const video = ref({})
+
     videoAuditApi(audit.value.id)
-    .then(res => video.value = res.data)
-    .catch(err => message.error(err.response.data))
+      .then(res => video.value = res.data)
+      .catch(err => message.error(err.response.data))
+
     const handleSubmit = () => {
       if (!audit.value.auditStatus) {
         notification.error({ message: '操作错误', description: '请进行审核，方可提交！' })
@@ -31,9 +35,10 @@ export default {
         return
       }
       videoHandleAuditApi(audit.value)
-      .then(res => router.push('/video/auditsuc'))
-      .catch(err => notification.error({ message: '操作错误', description: err.response.data }))
+        .then(res => router.push('/video/auditsuc'))
+        .catch(err => notification.error({ message: '操作错误', description: err.response.data }))
     }
+
     return { video, audit, handleSubmit }
   },
   template: `
