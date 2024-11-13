@@ -10,8 +10,8 @@ export default {
 
     const onFinish = values => {
       categoryAddApi(values)
-      .then(res => router.push('/cate/success'))
-      .catch(err => message.error(err.response.data))
+        .then(res => router.push('/cate/success'))
+        .catch(err => message.error(err.response.data))
     }
 
     return { onFinish, formState }
