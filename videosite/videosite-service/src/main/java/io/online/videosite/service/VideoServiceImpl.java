@@ -229,7 +229,7 @@ public class VideoServiceImpl implements VideoService {
         video.setCategoryId(model.getCategoryId());
         video.setVideoHits(0);
         video.setModifier(user.getUsername());
-        video.setVideoLinkMd5(model.getVideoLinkMd5());
+        Optional.ofNullable(model.getVideoLinkMd5()).ifPresent(video::setVideoLinkMd5);
         if (user.getAuthorities()
                 .stream()
                 .map(Authority::getAuthority)
