@@ -7,6 +7,7 @@ export default {
   async setup() {
     const router = VueRouter.useRouter()
     const route = VueRouter.useRoute()
+
     const formState = reactive({
       id: +route.params.id,
       videoName: '',
@@ -16,6 +17,7 @@ export default {
       videoFileList: [],
       imageFileList: [],
     })
+
     videoEditApi(formState.id).then(res => {
       const data = res.data
       formState.videoName = data.videoName
@@ -33,14 +35,17 @@ export default {
         url: data.videoLink
       }]
     }).catch(err => message.error(err.response.data))
+
     const onFinish = values => {
       videoHandleEditApi(formState)
       .then(res => router.push('/video/editsuc'))
       .catch(err => message.error(err.response.data))
     }
+
     const categories = (await categoryListApi()).map(({ id, categoryName }) => {
       return { label: categoryName, value: id }
     })
+
     const getFileSize = number => {
       if (number < 1024) {
         return `${number} bytes`
@@ -50,6 +55,7 @@ export default {
         return `${(number / 1048576).toFixed(1)} MB`
       }
     }
+
     const imageBeforeUpload = file => {
       if (!file.type.startsWith('image/')) {
         message.error(`此 ${file.name} 不是有效的图片文件！`)
@@ -63,6 +69,7 @@ export default {
       formState.videoLogo = file
       return false
     }
+
     const videoBeforeUpload = file => {
       if (!file.type.startsWith('video/')) {
         message.error(`此 ${file.name} 不是有效的视频文件！`)
@@ -76,20 +83,24 @@ export default {
       formState.videoLink = file
       return false
     }
+
     const setCursor = () => {
       document.querySelectorAll('span.ant-upload-list-item-name').forEach(el => el.style.cursor = 'pointer')
     }
+
     const modalState = reactive({
       previewVisible: false,
       previewTitle: '',
       previewUrl: '',
       isVideo: false,
     })
+
     const handleCancel = () => {
       modalState.previewVisible = false
       modalState.previewTitle = ''
       modalState.previewUrl = ''
     }
+
     const handlePreview = (file, isVideo) => {
       setCursor()
       modalState.previewVisible = true
@@ -97,6 +108,7 @@ export default {
       modalState.previewUrl = file.originFileObj ? URL.createObjectURL(file.originFileObj) : file.url
       modalState.isVideo = isVideo
     }
+
     return {
       onFinish,
       formState,
