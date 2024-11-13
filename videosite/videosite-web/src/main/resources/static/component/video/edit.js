@@ -38,8 +38,8 @@ export default {
 
     const onFinish = values => {
       videoHandleEditApi(formState)
-      .then(res => router.push('/video/editsuc'))
-      .catch(err => message.error(err.response.data))
+        .then(res => router.push('/video/editsuc'))
+        .catch(err => message.error(err.response.data))
     }
 
     const categories = (await categoryListApi()).map(({ id, categoryName }) => {
