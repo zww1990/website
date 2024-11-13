@@ -8,9 +8,7 @@ export default {
   setup() {
 //    const selectedKeys = ref( [location.pathname] )
 
-    const state = reactive({
-        keyword: null
-    })
+    const state = reactive({ keyword: null })
 
     const router = VueRouter.useRouter()
 
