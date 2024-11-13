@@ -3,6 +3,7 @@ import { userListApi } from '../utils/axiosapi.js'
 export default {
   async setup() {
     const dataSource = await userListApi()
+
     const columns = [
       { title: '主键', dataIndex: 'id', },
       { title: '用户名', dataIndex: 'username', },
@@ -13,6 +14,7 @@ export default {
       { title: '修改人', dataIndex: 'modifier', },
       { title: '修改时间', dataIndex: 'modifiedDate', },
     ]
+
     return { dataSource, columns }
   },
   template:`
