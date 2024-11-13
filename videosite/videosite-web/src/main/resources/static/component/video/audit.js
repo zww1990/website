@@ -14,8 +14,8 @@ export default {
       auditStatus: '',
       auditReason: '',
       radioOptions: [
-      { label: '审核通过', value: 'PASSED' },
-      { label: '审核不通过', value: 'UNPASSED' },
+        { label: '审核通过', value: 'PASSED' },
+        { label: '审核不通过', value: 'UNPASSED' },
       ]
     })
 
