@@ -122,10 +122,10 @@ public class JwtHelper {
             return true;
         } catch (Exception e) {
         	log.error(e.getLocalizedMessage(), e);
-            if (jwtId != null) {
-                // 验证失败后，将数据库里存在的删除掉。
-                this.jsonWebTokenRepository.removeToken(jwtId);
-            }
+//            if (jwtId != null) {
+//                // 验证失败后，将数据库里存在的删除掉。
+//                this.jsonWebTokenRepository.removeToken(jwtId);
+//            }
             return false;
         }
     }
