@@ -1,12 +1,15 @@
 export default {
   setup() {
     const router = VueRouter.useRouter()
+
     const goLogin = () => {
       router.push('/login')
     }
+
     const goHome = () => {
       router.push('/')
     }
+
     return { goLogin, goHome }
   },
   template: `
