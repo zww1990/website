@@ -6,17 +6,20 @@ const { message } = antd
 export default {
   setup() {
     const router = VueRouter.useRouter()
+
     const formState = reactive({
       username: '',
       nickname: '',
       password: '',
       password2: ''
     })
+
     const onFinish = values => {
       registerApi(values)
       .then(res => router.push('/success'))
       .catch(err => message.error(err.response.data))
     }
+
     const validatePass2 = async (_rule, value) => {
       if (value === '') {
         return Promise.reject('请再次确认您的密码!');
@@ -26,6 +29,7 @@ export default {
         return Promise.resolve();
       }
     }
+
     const validateName = async (_rule, value) => {
       if (value === '') {
         return Promise.reject('请输入您的用户名!');
@@ -35,6 +39,7 @@ export default {
         return Promise.resolve();
       }
     }
+
     return { onFinish, formState, validatePass2, validateName }
   },
   template: `
