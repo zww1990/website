@@ -8,9 +8,7 @@ export default {
   async setup() {
     const router = VueRouter.useRouter()
 
-    const state = reactive({
-      cards: [],
-    })
+    const state = reactive({ cards: [] })
 
     state.cards = await videoListApi()
 
