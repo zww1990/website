@@ -16,8 +16,8 @@ export default {
 
     const onFinish = values => {
       registerApi(values)
-      .then(res => router.push('/success'))
-      .catch(err => message.error(err.response.data))
+        .then(res => router.push('/success'))
+        .catch(err => message.error(err.response.data))
     }
 
     const validatePass2 = async (_rule, value) => {
