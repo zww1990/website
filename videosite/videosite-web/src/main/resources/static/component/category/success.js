@@ -1,12 +1,15 @@
 export default {
   setup() {
     const router = VueRouter.useRouter()
+
     const goCategoryAdd = () => {
       router.push('/cate/add')
     }
+
     const goHome = () => {
       router.push('/')
     }
+
     return { goCategoryAdd, goHome }
   },
   template: `
