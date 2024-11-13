@@ -7,11 +7,13 @@ export default {
   setup() {
     const router = VueRouter.useRouter()
     const formState = reactive({ categoryName: '' })
+
     const onFinish = values => {
       categoryAddApi(values)
       .then(res => router.push('/cate/success'))
       .catch(err => message.error(err.response.data))
     }
+
     return { onFinish, formState }
   },
   template: `
