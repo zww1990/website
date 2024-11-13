@@ -14,9 +14,23 @@ export default {
       categoryId: undefined,
       videoLogo: null,
       videoLink: null,
+      videoLinkMd5: null,
       videoFileList: [],
       imageFileList: [],
     })
+
+    const calculateMd5 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const spark = new SparkMD5.ArrayBuffer();
+                spark.append(reader.result);
+                resolve(spark.end());
+            };
+            reader.onerror = () => reject(reader.error);
+            reader.readAsArrayBuffer(file);
+        });
+    }
 
     videoEditApi(formState.id).then(res => {
       const data = res.data
@@ -36,8 +50,12 @@ export default {
       }]
     }).catch(err => message.error(err.response.data))
 
-    const onFinish = values => {
-      videoHandleEditApi(formState)
+    const onFinish = async values => {
+      values.id = formState.id
+      if(!!values.videoLink){
+        values.videoLinkMd5 = await calculateMd5(values.videoLink)
+      }
+      videoHandleEditApi(values)
         .then(res => router.push('/video/editsuc'))
         .catch(err => message.error(err.response.data))
     }

@@ -297,6 +297,11 @@ public class VideoController {
             log.info("handleEdit(): VideoLink = {}", model.getVideoLink().getOriginalFilename());
             model.setVideoLinkPath(this.makeFileName(model.getVideoLink().getOriginalFilename()));
         }
+        if (video.getVideoLinkMd5().equals(model.getVideoLinkMd5())) {
+            return ResponseEntity.badRequest()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body("此视频文件已存在，请重新上传！");
+        }
         // 先保存数据
         this.videoService.update(model, user, video);
         // 然后再写入视频封面、文件，避免保存失败，上传临时文件。
