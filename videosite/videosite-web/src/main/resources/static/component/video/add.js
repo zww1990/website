@@ -6,6 +6,7 @@ const { message, Upload } = antd
 export default {
   async setup() {
     const router = VueRouter.useRouter()
+
     const formState = reactive({
       videoName: '',
       categoryId: undefined,
@@ -33,9 +34,11 @@ export default {
       .then(res => router.push('/video/addsuc'))
       .catch(err => message.error(err.response.data))
     }
+
     const categories = (await categoryListApi()).map(({ id, categoryName }) => {
       return { label: categoryName, value: id }
     })
+
     const getFileSize = number => {
       if (number < 1024) {
         return `${number} bytes`
@@ -45,6 +48,7 @@ export default {
         return `${(number / 1048576).toFixed(1)} MB`
       }
     }
+
     const imageBeforeUpload = file => {
       if (!file.type.startsWith('image/')) {
         message.error(`此 ${file.name} 不是有效的图片文件！`)
@@ -58,6 +62,7 @@ export default {
       formState.videoLogo = file
       return false
     }
+
     const videoBeforeUpload = file => {
       if (!file.type.startsWith('video/')) {
         message.error(`此 ${file.name} 不是有效的视频文件！`)
@@ -71,20 +76,24 @@ export default {
       formState.videoLink = file
       return false
     }
+
     const setCursor = () => {
       document.querySelectorAll('span.ant-upload-list-item-name').forEach(el => el.style.cursor = 'pointer')
     }
+
     const modalState = reactive({
       previewVisible: false,
       previewTitle: '',
       previewUrl: '',
       isVideo: false,
     })
+
     const handleCancel = () => {
       modalState.previewVisible = false
       modalState.previewTitle = ''
       modalState.previewUrl = ''
     }
+
     const handlePreview = (file, isVideo) => {
       setCursor()
       modalState.previewVisible = true
@@ -92,6 +101,7 @@ export default {
       modalState.previewUrl = URL.createObjectURL(file.originFileObj)
       modalState.isVideo = isVideo
     }
+
     return {
       onFinish,
       formState,
