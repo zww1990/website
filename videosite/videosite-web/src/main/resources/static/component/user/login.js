@@ -9,12 +9,14 @@ export default {
     const router = VueRouter.useRouter()
     const route = VueRouter.useRoute()
     const formState = reactive({ username: '', password: '' })
+
     const onFinish = values => {
       loginApi(values).then(res => {
         store.setUser(res.data)
         router.push(route.query.redirect ? route.query.redirect : '/')
       }).catch(err => message.error(err.response.data))
     }
+
     return { onFinish, formState }
   },
   template: `
