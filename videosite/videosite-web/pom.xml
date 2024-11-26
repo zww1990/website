@@ -17,11 +17,11 @@
 
 	<properties>
 		<vue.version>3.5.13</vue.version>
-		<vue-router.version>4.4.5</vue-router.version>
+		<vue-router.version>4.5.0</vue-router.version>
 		<ant-design-vue.version>4.2.6</ant-design-vue.version>
 		<dayjs.version>1.11.13</dayjs.version>
 		<font-awesome.version>4.7.0</font-awesome.version>
-		<axios.version>1.7.7</axios.version>
+		<axios.version>1.7.8</axios.version>
 		<spark-md5.version>3.0.2</spark-md5.version>
 	</properties>
 
