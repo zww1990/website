@@ -5,6 +5,10 @@ server:
   servlet:
     jsp:
       registered: false
+    encoding:
+      force: true
+      force-request: true
+      force-response: true
   compression:
     enabled: true
 
@@ -45,18 +49,6 @@ spring:
       max-request-size: 100MB
       max-file-size: 100MB
 
-videosite-app:
-  include-path-patterns:
-    - /comment/add
-    - /videohub/edit
-    - /videohub/add
-    - /videohub/delete
-    - /videohub/list
-  admin-path-patterns:
-    - /category/add
-    - /videohub/audit
-    - /user/list
-  image-mime-patterns: image/*
-  video-mime-patterns: video/*
-  image-upload-folder: /upload/images
-  video-upload-folder: /upload/videos
+logging:
+  charset:
+    console: utf-8

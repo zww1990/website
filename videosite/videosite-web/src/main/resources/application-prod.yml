@@ -5,3 +5,19 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: root
     password: root
+
+videosite-app:
+  include-path-patterns:
+    - /comment/add
+    - /videohub/edit
+    - /videohub/add
+    - /videohub/delete
+    - /videohub/list
+  admin-path-patterns:
+    - /category/add
+    - /videohub/audit
+    - /user/list
+  image-mime-patterns: image/*
+  video-mime-patterns: video/*
+  image-upload-folder: /upload/images
+  video-upload-folder: /upload/videos
