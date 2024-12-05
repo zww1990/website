@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<springProperty scope="context" name="CONSOLE_LOG_CHARSET" source="logging.charset.console" defaultValue="UTF-8"/>
-	<springProperty scope="context" name="spring_application_name" source="spring.application.name" defaultValue="videosite-app"/>
+	<!--<springProperty scope="context" name="CONSOLE_LOG_CHARSET" source="logging.charset.console" defaultValue="UTF-8"/>
+	<springProperty scope="context" name="spring_application_name" source="spring.application.name" defaultValue="videosite-app"/>-->
 	<property name="CONSOLE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } --- [%15.15t] %-40.40logger{39} : %m%n"/>
+	<property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
 	<property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } --- [%15.15t] %-40.40logger{39} : %m%n"/>
 	<property name="FILE_LOG_CHARSET" value="UTF-8"/>
 	<property name="LOG_FILE" value="./${spring_application_name}.log"/>
@@ -18,7 +19,7 @@
 		<appender-ref ref="CONSOLE" />
 	</appender>
 
-	<springProfile name="prod">
+	<!--<springProfile name="prod">
 		<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 			<encoder>
 				<pattern>${FILE_LOG_PATTERN}</pattern>
@@ -37,14 +38,14 @@
 		<appender name="FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
 			<appender-ref ref="FILE" />
 		</appender>
-	</springProfile>
+	</springProfile>-->
 
 	<root level="info">
 		<appender-ref ref="CONSOLE_ASYNC" />
 
-		<springProfile name="prod">
+		<!--<springProfile name="prod">
 			<appender-ref ref="FILE_ASYNC" />
-		</springProfile>
+		</springProfile>-->
 	</root>
 
 	<logger name="org.apache.catalina.startup.DigesterFactory" level="ERROR"/>
