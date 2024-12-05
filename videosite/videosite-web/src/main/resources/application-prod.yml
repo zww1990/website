@@ -5,6 +5,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: root
     password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      validation-query: select 1
 
 videosite-app:
   include-path-patterns:
