@@ -17,6 +17,7 @@
 
 	<properties>
 		<vue.version>3.5.13</vue.version>
+		<vuex.version>4.1.0</vuex.version>
 		<vue-router.version>4.5.0</vue-router.version>
 		<ant-design-vue.version>4.2.6</ant-design-vue.version>
 		<dayjs.version>1.11.13</dayjs.version>
@@ -262,6 +263,19 @@
 			<artifactId>spark-md5</artifactId>
 			<version>${spark-md5.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+		<!-- vuex -->
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>vuex</artifactId>
+			<version>${vuex.version}</version>
+			<scope>runtime</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.webjars.npm</groupId>
+					<artifactId>vue__devtools-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
