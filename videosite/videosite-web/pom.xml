@@ -265,7 +265,7 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!-- vuex -->
-		<dependency>
+		<!--<dependency>
 			<groupId>org.webjars.npm</groupId>
 			<artifactId>vuex</artifactId>
 			<version>${vuex.version}</version>
@@ -276,7 +276,7 @@
 					<artifactId>vue__devtools-api</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency>-->
 	</dependencies>
 
 	<build>
