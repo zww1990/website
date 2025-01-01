@@ -1,7 +1,6 @@
 package io.online.videosite;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -21,18 +20,12 @@ import java.util.stream.Stream;
 public class VideoSiteApplication {
 
     public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(VideoSiteApplication.class);
-//        closePrintBanner(application);
-        ConfigurableApplicationContext context = application.run(args);
+        ConfigurableApplicationContext context = SpringApplication.run(VideoSiteApplication.class, args);
         log.info("Spring Bean Definition Count = {}", context.getBeanDefinitionCount());
 //        printBeans(context);
     }
 
     static void printBeans(ApplicationContext context) {
         Stream.of(context.getBeanDefinitionNames()).forEach(System.err::println);
-    }
-
-    static void closePrintBanner(SpringApplication application) {
-        application.setBannerMode(Banner.Mode.OFF);
     }
 }
