@@ -51,14 +51,14 @@ public class JwtHelper {
         JwtProperties config = this.properties.getJwt();
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUsername())
-                .issuer(config.getIssuer())
+                .issuer(config.issuer())
                 .issueTime(new Date())
-                .expirationTime(new Date(System.currentTimeMillis() + config.getExpiration().toMillis()))
+                .expirationTime(new Date(System.currentTimeMillis() + config.expiration().toMillis()))
                 .jwtID(UUID.randomUUID().toString().replace("-", ""))
                 .build();
         SignedJWT signedJWT = new SignedJWT(jwsHeader, jwtClaimsSet);
         try {
-            MACSigner macSigner = new MACSigner(config.getSecret());
+            MACSigner macSigner = new MACSigner(config.secret());
             signedJWT.sign(macSigner);
             String token = signedJWT.serialize();
             // 持久化jwt
@@ -107,7 +107,7 @@ public class JwtHelper {
     public boolean verifyToken(String token, String jwtId) {
         try {
             DefaultJWTProcessor<SecurityContext> processor = new DefaultJWTProcessor<>();
-            ImmutableSecret<SecurityContext> secret = new ImmutableSecret<>(this.properties.getJwt().getSecret().getBytes());
+            ImmutableSecret<SecurityContext> secret = new ImmutableSecret<>(this.properties.getJwt().secret().getBytes());
             JWSVerificationKeySelector<SecurityContext> selector = new JWSVerificationKeySelector<>(JWSAlgorithm.HS256, secret);
             SimpleSecurityContext context = new SimpleSecurityContext();
             processor.setJWSKeySelector(selector);
