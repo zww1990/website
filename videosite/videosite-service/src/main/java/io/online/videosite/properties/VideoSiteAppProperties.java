@@ -5,7 +5,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.convert.DurationUnit;
-import org.springframework.context.annotation.Configuration;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -15,7 +14,6 @@ import java.time.temporal.ChronoUnit;
  *
  * @author 张维维
  */
-@Configuration
 @ConfigurationProperties(ignoreInvalidFields = true, prefix = "videosite-app")
 @Getter
 @Setter
