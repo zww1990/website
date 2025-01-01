@@ -14,7 +14,11 @@ It is an online video website developed based on Spring Boot.
 
 2. Clone this project:
 
-	git clone https://gitlab.com/zww1990/website.git
+   git clone https://github.com/zww1990/website.git
+
+   or
+
+   git clone https://gitee.com/zww1990/website.git
 
 3. Compile this project:
 
