@@ -50,12 +50,23 @@ public class VideoSiteAppProperties {
     /**
      * JWT配置
      */
-    private JwtProperties jwt = new JwtProperties("SpringSecurity", "hellovideosite1234hellovideosite", Duration.ofMinutes(30));
+    private JwtProperties jwt = new JwtProperties();
 
-    /**
-     * @param secret 密钥，最少32个字符
-     * @param issuer 发布者
-     * @param expiration 失效时间，单位分
-     */
-    public record JwtProperties(String secret, String issuer, @DurationUnit(ChronoUnit.MINUTES) Duration expiration) {}
+    @Getter
+    @Setter
+    public static class JwtProperties {
+        /**
+         * 密钥，最少32个字符
+         */
+        private String secret = "hellovideosite1234hellovideosite";
+        /**
+         * 发布者
+         */
+        private String issuer = "SpringSecurity";
+        /**
+         * 失效时间，单位分
+         */
+        @DurationUnit(ChronoUnit.MINUTES)
+        private Duration expiration = Duration.ofMinutes(30);
+    }
 }

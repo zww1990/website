@@ -24,7 +24,3 @@ videosite-app:
   video-mime-patterns: video/*
   image-upload-folder: /upload/images
   video-upload-folder: /upload/videos
-  jwt:
-    issuer: SpringSecurity
-    secret: hellovideosite1234hellovideosite
-    expiration: 30
