@@ -64,7 +64,7 @@ export default {
            </Suspense>
          </div>
        </a-layout-content>
-       <a-layout-footer :style="{ textAlign: 'center' }">Copyright &copy; 2020 - 2024 关于网站 网站推广 联系我们 帮助中心</a-layout-footer>
+       <a-layout-footer :style="{ textAlign: 'center' }">Copyright &copy; 2020 - 2025 关于网站 网站推广 联系我们 帮助中心</a-layout-footer>
       </a-layout>
     </a-config-provider>
   `
