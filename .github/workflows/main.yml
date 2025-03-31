@@ -17,4 +17,4 @@ jobs:
       - name: 应用程序打包
         run: mvn package
       - name: 显示构件目录结构
-        run: tree ./target
+        run: ll -h
