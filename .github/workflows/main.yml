@@ -1,0 +1,15 @@
+name: spring boot 应用程序构建
+run-name: spring boot 应用程序构建
+on: [push, workflow_dispatch]
+jobs:
+  maven-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 克隆仓库代码
+        uses: actions/checkout@v4
+      - name: 应用程序编译
+        run: mvn compile
+      - name: 应用程序打包
+        run: mvn package
+      - name: 显示构件目录结构
+        run: tree ./target
