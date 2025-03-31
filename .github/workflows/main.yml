@@ -11,6 +11,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 21
+          distribution: 'oracle'
       - name: 应用程序编译
         run: mvn compile
       - name: 应用程序打包
