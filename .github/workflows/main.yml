@@ -3,7 +3,7 @@ run-name: spring boot 应用程序构建
 on: [push, workflow_dispatch]
 jobs:
   maven-package:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: 克隆仓库代码
         uses: actions/checkout@v4
@@ -17,4 +17,4 @@ jobs:
       - name: 应用程序打包
         run: mvn package
       - name: 显示构件目录结构
-        run: ls
+        run: tree /F
